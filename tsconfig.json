@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "strictBindCallApply": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@config/*": ["./src/config/*"],
+      "@common/*": ["./src/common/*"],
+      "@mocks/*": ["./src/mocks/*"],
+      "@user/*": ["./src/user/*"],
+      "@auth/*": ["./src/auth/*"],
+      "@product/*": ["./src/product/*"],
+      "@cart/*": ["./src/cart/*"],
+      "@aws/*": ["./src/aws/*"],
+      "@category/*": ["./src/category/*"],
+      "@pipes/*": ["./src/pipes/*"],
+      "@validators/*": ["./src/validators/*"],
+      "@mail/*": ["./src/mail/*"]
+    },
+    "resolveJsonModule": true
+  }
+}

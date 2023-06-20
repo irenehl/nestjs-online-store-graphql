@@ -1,0 +1,125 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  lastname  String
+  username  String  @unique
+  email     String  @unique
+  password  String
+  recovery  String? @unique @db.Uuid
+  role      Role   @default(CLIENT)
+
+  cart      Cart?
+
+  orders    Order[]
+  likesOnProducts LikesOnProducts[]
+
+  @@map("user")
+}
+
+model Product {
+  SKU         Int     @id @default(autoincrement())
+  name        String @unique
+  description String  @db.VarChar(200)
+  price       Float
+  stock       Int
+  image       String?
+  imageUrl    String?
+  available   Boolean @default(true)
+
+  cart      ProductsOnCarts[]
+  orders    ProductsOnOrders[]
+  likesOnProducts LikesOnProducts[]
+
+  category  Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId Int @map("category_id")
+
+  @@map("product")
+}
+
+model Category {
+  id        Int @id @default(autoincrement())
+  name      String @db.VarChar(15) @unique
+
+  products  Product[]
+
+  @@map("category")
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  orderedAt DateTime @default(now()) @map("ordered_at")
+  total     Float    @default(0)
+
+  products ProductsOnOrders[]
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @map("user_id")
+
+  @@map("order")
+}
+
+model Cart {
+  id Int @id @default(autoincrement())
+
+  products ProductsOnCarts[]
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @unique @map("user_id")
+
+  @@map("cart")
+}
+
+model ProductsOnCarts {
+  quantity   Int
+
+  cart       Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cartId     Int     @map("cart_id")
+
+  product    Product @relation(fields: [productSKU], references: [SKU], onDelete: Cascade)
+  productSKU Int     @map("product_sku")
+  
+  @@id([cartId, productSKU])
+  @@map("products_on_carts")
+}
+
+model ProductsOnOrders {
+  quantity   Int
+
+  product    Product @relation(fields: [productSKU], references: [SKU], onDelete: Cascade)
+  productSKU Int     @map("product_sku")
+
+  order      Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId    Int     @map("order_id")
+
+  @@id([productSKU, orderId])
+  @@map("products_on_orders")
+}
+
+model LikesOnProducts {
+  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int     @map("user_id")
+
+  product    Product @relation(fields: [productSKU], references: [SKU], onDelete: Cascade)
+  productSKU Int     @map("product_sku")
+
+  @@id([userId, productSKU])
+  @@map("likes_on_products")
+}
+
+enum Role {
+  MANAGER
+  CLIENT
+	@@map("Roles")
+}
