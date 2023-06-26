@@ -9,21 +9,25 @@ import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 
 @Resolver(() => User)
 export class UserResolver {
-    constructor(private userService: UserService) { }
+    constructor(private userService: UserService) {}
 
     @Mutation(() => User, { name: 'createUser' })
     async create(
-        @Args('createUserInput') createUserInput: CreateUserInput): Promise<User> {
+        @Args('createUserInput') createUserInput: CreateUserInput
+    ): Promise<User> {
         return this.userService.create(createUserInput);
     }
 
+    // TODO: Auth
     @UseGuards(JwtAuthGuard)
     @Mutation(() => User, { name: 'updateUser' })
     async updateUser(
-        @Args('updateUserInput') updateUserInput: UpdateUserInput): Promise<User> {
+        @Args('updateUserInput') updateUserInput: UpdateUserInput
+    ): Promise<User> {
         return this.userService.update(updateUserInput.id, updateUserInput);
     }
 
+    // TODO: Auth
     @UseGuards(JwtAuthGuard)
     @Mutation(() => User, { name: 'deleteUser' })
     async deleteUser(
@@ -32,13 +36,13 @@ export class UserResolver {
         return this.userService.delete(id);
     }
 
-    @Query(() => User, { name: 'findOne' })
+    @Query(() => User, { name: 'findOneUser' })
     async getOne(@Args('id', { type: () => Int }) id: number) {
-        return this.userService.findOne({ id })
+        return this.userService.findOne({ id });
     }
 
-    @Query(() => [User], { name: 'findAll' })
+    @Query(() => [User], { name: 'findAllUsers' })
     async getAll(@Args() paginationArgs: PaginationArgs): Promise<User[]> {
-        return this.userService.findAll(paginationArgs)
+        return this.userService.findAll(paginationArgs);
     }
 }

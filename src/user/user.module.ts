@@ -8,6 +8,12 @@ import { UserResolver } from './user.resolver';
 
 @Module({
     imports: [AwsModule],
-    providers: [UserResolver, UserService, PrismaService, ConfigService, SesService, UserResolver]
+    providers: [
+        UserService,
+        PrismaService,
+        ConfigService,
+        SesService,
+        UserResolver,
+    ],
 })
-export class UserModule { }
+export class UserModule {}

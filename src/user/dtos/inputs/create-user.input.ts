@@ -1,6 +1,12 @@
-import { Field, InputType } from "@nestjs/graphql";
-import { Role } from "@prisma/client";
-import { IsString, IsEmail, IsOptional, IsEnum, IsStrongPassword } from "class-validator";
+import { Field, InputType } from '@nestjs/graphql';
+import { Role } from '@prisma/client';
+import {
+    IsString,
+    IsEmail,
+    IsOptional,
+    IsEnum,
+    IsStrongPassword,
+} from 'class-validator';
 
 @InputType()
 export class CreateUserInput {
@@ -33,5 +39,4 @@ export class CreateUserInput {
     @IsEnum(Role)
     @IsOptional()
     role: Role;
-    
 }

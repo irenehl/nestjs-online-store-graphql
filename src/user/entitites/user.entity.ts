@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class User {
@@ -18,7 +18,7 @@ export class User {
     email: string;
 
     @Field(() => String, { nullable: true })
-    recovery?: string | null
+    recovery?: string | null;
 
     @Field(() => String)
     role: string;
