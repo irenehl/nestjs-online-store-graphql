@@ -25,9 +25,7 @@ export class CategoryService {
         return this.prisma.category.create({ data });
     }
 
-    async findOne(
-        where: Prisma.CategoryWhereUniqueInput
-    ): Promise<Category> {
+    async findOne(where: Prisma.CategoryWhereUniqueInput): Promise<Category> {
         const result = await this.prisma.category
             .findFirstOrThrow({
                 where,
@@ -46,7 +44,7 @@ export class CategoryService {
             orderBy?: Prisma.CategoryOrderByWithAggregationInput;
         }
     ): Promise<Category[]> {
-        const { page, limit, cursor, where, orderBy } = params; 
+        const { page, limit, cursor, where, orderBy } = params;
 
         const a = await this.prisma.category.findMany({
             skip: Number(page) - 1,

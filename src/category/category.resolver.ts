@@ -20,27 +20,28 @@ export class CategoryResolver {
     async update(
         @Args('updateCategoryInput') updateCategoryInput: UpdateCategoryInput
     ): Promise<Category> {
-        return this.categoryService.update({ id: updateCategoryInput.id }, updateCategoryInput);
+        return this.categoryService.update(
+            { id: updateCategoryInput.id },
+            updateCategoryInput
+        );
     }
 
     @Mutation(() => Category, { name: 'deleteCategory' })
     async delete(
         @Args('id', { type: () => Int }) id: number
     ): Promise<Category> {
-        return this.categoryService.delete({ id })
+        return this.categoryService.delete({ id });
     }
 
     @Query(() => Category, { name: 'findOneCategory' })
     async findOne(
         @Args('id', { type: () => Int }) id: number
     ): Promise<Category> {
-        return this.categoryService.findOne({id})
+        return this.categoryService.findOne({ id });
     }
 
     @Query(() => [Category], { name: 'findAllCategories' })
-    async findAll(
-        @Args() paginationArgs: PaginationArgs
-    ): Promise<Category[]> {
-        return this.categoryService.findAll(paginationArgs)
+    async findAll(@Args() paginationArgs: PaginationArgs): Promise<Category[]> {
+        return this.categoryService.findAll(paginationArgs);
     }
 }
