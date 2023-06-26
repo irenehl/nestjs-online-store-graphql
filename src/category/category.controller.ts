@@ -37,13 +37,13 @@ export class CategoryController {
         return this.categoryService.findOne({ id: Number(id) });
     }
 
-    @Get()
-    async findAll(
-        @Query('page') page: string,
-        @Query('limit') limit: string
-    ): Promise<CategoryDto[]> {
-        return this.categoryService.findAll({ page, limit });
-    }
+    // @Get()
+    // async findAll(
+    //     @Query('page') page: string,
+    //     @Query('limit') limit: string
+    // ): Promise<CategoryDto[]> {
+    //     return this.categoryService.findAll({ page, limit });
+    // }
 
     @Patch(':id')
     @Role('MANAGER')
