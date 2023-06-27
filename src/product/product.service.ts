@@ -5,13 +5,13 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { ProductDto } from './dtos/product.dto';
 import { S3Service } from '@aws/s3.service';
 import { CategoryService } from '@category/category.service';
 import { Product } from './entities/product.entity';
 import { CreateProductInput } from './dtos/input/create-product.input';
 import { UpdateProductInput } from './dtos/input/update-product.input';
 import { PaginationArgs } from '@common/dto/args/pagination.arg';
+import { LikeOnProduct } from './entities/like-on-product.entity';
 
 @Injectable()
 export class ProductService {
@@ -97,21 +97,28 @@ export class ProductService {
         });
     }
 
-    async getProductByCategory(categoryId: number): Promise<ProductDto[]> {
-        const products = await this.prisma.product.findMany({
+    async getProductByCategory(
+        categoryId: number,
+        params: PaginationArgs & {
+            cursor?: Prisma.ProductWhereUniqueInput;
+            where?: Prisma.ProductWhereInput;
+            orderBy?: Prisma.ProductOrderByWithAggregationInput;
+        }
+    ): Promise<Product[]> {
+        const { page, limit, cursor, orderBy } = params;
+
+        return await this.prisma.product.findMany({
+            skip: Number(page) - 1,
+            take: Number(limit),
+            cursor,
             where: {
                 categoryId,
             },
+            orderBy,
             include: {
-                category: {
-                    select: {
-                        name: true,
-                    },
-                },
+                category: true,
             },
         });
-
-        return products.map(ProductDto.toDto);
     }
 
     async update(
@@ -169,7 +176,7 @@ export class ProductService {
         });
     }
 
-    async likeProduct(userId: number, SKU: number): Promise<any> {
+    async likeProduct(userId: number, SKU: number): Promise<LikeOnProduct> {
         const _ = await this.findOne({ SKU });
 
         const isLiked = await this.prisma.likesOnProducts.findUnique({
@@ -189,9 +196,6 @@ export class ProductService {
                           productSKU: SKU,
                       },
                   },
-                  include: {
-                      product: true,
-                  },
               })
             : await this.prisma.likesOnProducts.create({
                   data: {
@@ -206,10 +210,19 @@ export class ProductService {
                           },
                       },
                   },
-                  include: {
-                      product: true,
-                  },
               });
+    }
+
+    async getFavoriteList(
+        userId: number,
+        SKU: number
+    ): Promise<LikeOnProduct[]> {
+        return await this.prisma.likesOnProducts.findMany({
+            where: {
+                userId,
+                productSKU: SKU,
+            },
+        });
     }
 
     async delete(SKU: number): Promise<Product> {

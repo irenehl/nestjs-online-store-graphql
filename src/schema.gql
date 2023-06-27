@@ -33,9 +33,16 @@ type Product {
   imageUrl: String
 }
 
+type LikeOnProduct {
+  userId: Int!
+  productSKU: Int!
+}
+
 type Query {
   findOneUser(id: Int!): User!
   findAllUsers(page: Int! = 1, limit: Int! = 15): [User!]!
+  getMyFavoriteList(SKU: Int!): [LikeOnProduct!]!
+  getProductsByCategory(categoryId: Int!, page: Int! = 1, limit: Int! = 15): [Product!]!
   findOneProduct(SKU: Int!): Product!
   findAllProducts(page: Int! = 1, limit: Int! = 15): [Product!]!
   findOneCategory(id: Int!): Category!
@@ -51,7 +58,7 @@ type Mutation {
   updateProduct(updateProductInput: UpdateProductInput!): Product!
   deleteProduct(SKU: Int!): Product!
   toggleProduct(SKU: Int!): Product!
-  likeProduct(SKU: Int!): Product!
+  likeProduct(SKU: Int!): LikeOnProduct!
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
   deleteCategory(id: Int!): Category!
