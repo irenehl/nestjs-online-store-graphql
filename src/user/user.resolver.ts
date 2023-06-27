@@ -6,6 +6,8 @@ import { PaginationArgs } from '@common/dto/args/pagination.arg';
 import { UpdateUserInput } from './dtos/inputs/update-user.input';
 import { ParseIntPipe, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
+import { Role } from '@auth/decorators/role.decorator';
+import { RolesGuard } from '@auth/guards/role.guard';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -18,8 +20,8 @@ export class UserResolver {
         return this.userService.create(createUserInput);
     }
 
-    // TODO: Auth
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Role('MANAGER')
     @Mutation(() => User, { name: 'updateUser' })
     async updateUser(
         @Args('updateUserInput') updateUserInput: UpdateUserInput
