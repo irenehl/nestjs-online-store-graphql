@@ -35,14 +35,24 @@ export class AuthService {
         };
     }
 
-    async resetRequest(dto: RequestPasswordInput) {
-        return this.userService.resetRequest(dto.email);
+    // TODO: Check return type
+    async resetRequest({ email }: RequestPasswordInput): Promise<boolean> {
+        const sendEmail = await this.userService.resetRequest(email);
+
+        if (!sendEmail) throw new BadRequestException('Something went wrong');
+
+        return true;
     }
 
-    async resetHandler(dto: ResetPasswordInput, token: string) {
+    // TODO: Check return type
+    async resetHandler(data: ResetPasswordInput, token: string) {
         if (!token || token.length <= 0)
             throw new BadRequestException('Token is invalid');
 
-        return this.userService.resetHandler(dto, token);
+        const resetPwd = await this.userService.resetHandler(data, token);
+
+        if (!resetPwd) throw new BadRequestException('Something went wrong');
+
+        return true;
     }
 }
