@@ -1,6 +1,5 @@
 import { Category } from '@category/entities/category.entity';
-import { Field, Float, InputType, Int, ObjectType } from '@nestjs/graphql';
-import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class Product {

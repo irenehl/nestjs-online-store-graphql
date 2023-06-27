@@ -1,4 +1,3 @@
-import { Category } from '@category/entities/category.entity';
 import { Field, Float, InputType, Int } from '@nestjs/graphql';
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 

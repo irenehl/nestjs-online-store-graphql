@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '@config/prisma.service';
 import { S3Service } from '@aws/s3.service';
-import { CategoryService } from '@category/category.service';
 import { createS3Mock } from '@mocks/s3.mock';
 import { createMockContext } from '@mocks/prisma.mock';
 import { ConfigService } from '@nestjs/config';

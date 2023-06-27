@@ -10,7 +10,6 @@ import * as bcrypt from 'bcrypt';
 import { TokenDto } from './dtos/token.dto';
 import { ResetPasswordInput } from '@user/dtos/inputs/reset-password.input';
 import { RequestPasswordInput } from '@user/dtos/inputs/request-password.input';
-import { User } from '@user/entitites/user.entity';
 import { LoginInput } from './dtos/inputs/login.input';
 
 @Injectable()

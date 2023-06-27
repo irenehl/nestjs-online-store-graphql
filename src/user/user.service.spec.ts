@@ -5,12 +5,10 @@ import { MockContext, createMockContext } from '@mocks/prisma.mock';
 import { allUsersMock, userMock } from './mocks/user.mock';
 import { ConfigService } from '@nestjs/config';
 import { SesService } from '@aws/ses.service';
-import { SESMockContext, createSESMock } from '@mocks/ses.mock';
 
 describe('UserService', () => {
     let service: UserService;
     let prisma: MockContext;
-    let ses: SESMockContext;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -18,13 +16,10 @@ describe('UserService', () => {
         })
             .overrideProvider(PrismaService)
             .useValue(createMockContext())
-            .overrideProvider(SesService)
-            .useValue(createSESMock())
             .compile();
 
         service = module.get<UserService>(UserService);
         prisma = module.get<MockContext>(PrismaService);
-        ses = module.get<SESMockContext>(SesService);
     });
 
     it('should be defined', () => {
@@ -175,20 +170,4 @@ describe('UserService', () => {
             );
         });
     });
-
-    // describe('recoveryRequest', () => {
-    //     it('should sent recovery request', async () => {
-    //         prisma.user.findUniqueOrThrow.mockResolvedValueOnce(userMock);
-    //         prisma.user.update.mockResolvedValueOnce({
-    //             ...userMock,
-    //             recovery: 'e66c1414-ef82-43ba-b008-ca4cc3331f8c',
-    //         });
-
-    //         const result = await service.resetRequest(userMock.email);
-
-    //         console.log(result);
-
-    //         expect(ses.send).toHaveBeenCalled();
-    //     });
-    // });
 });

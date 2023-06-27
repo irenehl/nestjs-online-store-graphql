@@ -1,4 +1,4 @@
-import { Mutation, Resolver } from '@nestjs/graphql';
+import { Resolver } from '@nestjs/graphql';
 import { CartService } from './cart.service';
 
 @Resolver()

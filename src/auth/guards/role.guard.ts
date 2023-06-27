@@ -1,7 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Role } from '@prisma/client';
-import { PayloadDto } from '../dtos/payload.dto';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()

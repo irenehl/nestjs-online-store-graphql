@@ -7,7 +7,6 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { Prisma, Role, User } from '@prisma/client';
-import { IPagination } from '@common/interfaces/pagination.dto';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuid } from 'uuid';
 import { SesService } from '@aws/ses.service';

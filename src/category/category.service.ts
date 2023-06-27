@@ -1,4 +1,3 @@
-import { IPagination } from '@common/interfaces/pagination.dto';
 import { PrismaService } from '@config/prisma.service';
 import {
     ConflictException,
@@ -6,7 +5,6 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { CategoryDto } from './dtos/category.dto';
 import { PaginationArgs } from '@common/dto/args/pagination.arg';
 import { Category } from './entities/category.entity';
 
