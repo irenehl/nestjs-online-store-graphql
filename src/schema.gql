@@ -12,15 +12,54 @@ type User {
   role: String!
 }
 
+type Token {
+  access_token: String!
+}
+
+type Category {
+  id: ID!
+  name: String!
+}
+
+type Product {
+  SKU: Int!
+  name: String!
+  description: String!
+  price: Float!
+  stock: Int!
+  available: Boolean!
+  category: Category!
+  image: String
+  imageUrl: String
+}
+
 type Query {
-  findOne(id: Int!): User!
-  findAll(page: Int! = 1, limit: Int! = 15): [User!]!
+  findOneUser(id: Int!): User!
+  findAllUsers(page: Int! = 1, limit: Int! = 15): [User!]!
+  findOneProduct(SKU: Int!): Product!
+  findAllProducts(page: Int! = 1, limit: Int! = 15): [Product!]!
+  findOneCategory(id: Int!): Category!
+  findAllCategories(page: Int! = 1, limit: Int! = 15): [Category!]!
 }
 
 type Mutation {
+  login(loginInput: LoginInput!): Token!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   deleteUser(id: ID!): User!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  deleteProduct(SKU: Int!): Product!
+  toggleProduct(SKU: Int!): Product!
+  likeProduct(SKU: Int!): Product!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  deleteCategory(id: Int!): Category!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
 }
 
 input CreateUserInput {
@@ -41,4 +80,32 @@ input UpdateUserInput {
   password: String
   username: String
   role: String
+}
+
+input CreateProductInput {
+  name: String!
+  description: String!
+  price: Float!
+  stock: Int!
+  available: Boolean
+  categoryId: Int!
+}
+
+input UpdateProductInput {
+  SKU: Int!
+  name: String
+  description: String
+  price: Float
+  stock: Int
+  available: Boolean
+  categoryId: Int
+}
+
+input CreateCategoryInput {
+  name: String!
+}
+
+input UpdateCategoryInput {
+  id: Int!
+  name: String!
 }
