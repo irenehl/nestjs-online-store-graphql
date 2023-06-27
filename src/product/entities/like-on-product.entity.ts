@@ -1,5 +1,4 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Product } from './product.entity';
 
 @ObjectType()
 export class LikeOnProduct {
