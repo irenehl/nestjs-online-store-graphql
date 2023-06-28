@@ -1,6 +1,14 @@
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+    Args,
+    Int,
+    Mutation,
+    Parent,
+    Query,
+    ResolveField,
+    Resolver,
+} from '@nestjs/graphql';
 import { ProductService } from './product.service';
-import { Product } from './entities/product.entity';
+// import { Product } from './entities/product.entity';
 import { CreateProductInput } from './dtos/input/create-product.input';
 import { UpdateProductInput } from './dtos/input/update-product.input';
 import { PaginationArgs } from '@common/dto/args/pagination.arg';
@@ -10,16 +18,24 @@ import { UseGuards } from '@nestjs/common';
 import { Role } from '@auth/decorators/role.decorator';
 import { Public } from '@auth/decorators/public.decorator';
 import { LikeOnProduct } from './entities/like-on-product.entity';
+import { CategoryService } from '@category/category.service';
+import { Product } from '@prisma/client';
+import { ProductEntity } from './entities/product.entity';
+import { UserDecorator } from '@user/decorators/user.decorator';
+import { User } from '@user/entitites/user.entity';
 
-@Resolver()
+@Resolver(() => ProductEntity)
 @UseGuards(JwtAuthGuard)
 export class ProductResolver {
-    constructor(private readonly productService: ProductService) {}
+    constructor(
+        private readonly productService: ProductService,
+        private readonly caategoryService: CategoryService
+    ) {}
 
     // TODO: Missing img
     @UseGuards(RolesGuard)
     @Role('MANAGER')
-    @Mutation(() => Product, { name: 'createProduct' })
+    @Mutation(() => ProductEntity, { name: 'createProduct' })
     async create(
         @Args('createProductInput') createProductInput: CreateProductInput
     ): Promise<Product> {
@@ -29,7 +45,7 @@ export class ProductResolver {
     // TODO: Missing img
     @UseGuards(RolesGuard)
     @Role('MANAGER')
-    @Mutation(() => Product, { name: 'updateProduct' })
+    @Mutation(() => ProductEntity, { name: 'updateProduct' })
     async update(
         @Args('updateProductInput') updateProductInput: UpdateProductInput
     ): Promise<Product> {
@@ -41,7 +57,7 @@ export class ProductResolver {
 
     @UseGuards(RolesGuard)
     @Role('MANAGER')
-    @Mutation(() => Product, { name: 'deleteProduct' })
+    @Mutation(() => ProductEntity, { name: 'deleteProduct' })
     async delete(
         @Args('SKU', { type: () => Int }) SKU: number
     ): Promise<Product> {
@@ -50,31 +66,31 @@ export class ProductResolver {
 
     @UseGuards(RolesGuard)
     @Role('MANAGER')
-    @Mutation(() => Product, { name: 'toggleProduct' })
+    @Mutation(() => ProductEntity, { name: 'toggleProduct' })
     async toggle(
         @Args('SKU', { type: () => Int }) SKU: number
     ): Promise<Product> {
         return this.productService.toggle(SKU);
     }
 
-    // TODO: Fix user id
     @Mutation(() => LikeOnProduct, { name: 'likeProduct' })
     async likeProduct(
+        @UserDecorator() user: User,
         @Args('SKU', { type: () => Int }) SKU: number
     ): Promise<LikeOnProduct> {
-        return this.productService.likeProduct(2, SKU);
+        return this.productService.likeProduct(user.id, SKU);
     }
 
-    // TODO: Fix user id
     @Query(() => [LikeOnProduct], { name: 'getMyFavoriteList' })
     async getFavorites(
+        @UserDecorator() user: User,
         @Args('SKU', { type: () => Int }) SKU: number
     ): Promise<LikeOnProduct[]> {
-        return this.productService.getFavoriteList(2, SKU);
+        return this.productService.getFavoriteList(user.id, SKU);
     }
 
     @Public()
-    @Query(() => [Product], { name: 'getProductsByCategory' })
+    @Query(() => [ProductEntity], { name: 'getProductsByCategory' })
     async getProductsByCategory(
         @Args('categoryId', { type: () => Int }) id: number,
         @Args() paginationArgs: PaginationArgs
@@ -83,7 +99,7 @@ export class ProductResolver {
     }
 
     @Public()
-    @Query(() => Product, { name: 'findOneProduct' })
+    @Query(() => ProductEntity, { name: 'findOneProduct' })
     async findOne(
         @Args('SKU', { type: () => Int }) SKU: number
     ): Promise<Product> {
@@ -91,8 +107,15 @@ export class ProductResolver {
     }
 
     @Public()
-    @Query(() => [Product], { name: 'findAllProducts' })
+    @Query(() => [ProductEntity], { name: 'findAllProducts' })
     async findAll(@Args() paginationArgs: PaginationArgs): Promise<Product[]> {
         return this.productService.findAll(paginationArgs);
+    }
+
+    @ResolveField()
+    async category(@Parent() product: Product) {
+        const { categoryId } = product;
+
+        return this.caategoryService.findOne({ id: categoryId });
     }
 }

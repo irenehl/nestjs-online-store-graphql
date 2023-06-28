@@ -7,11 +7,11 @@ import {
 import { Prisma } from '@prisma/client';
 import { S3Service } from '@aws/s3.service';
 import { CategoryService } from '@category/category.service';
-import { Product } from './entities/product.entity';
 import { CreateProductInput } from './dtos/input/create-product.input';
 import { UpdateProductInput } from './dtos/input/update-product.input';
 import { PaginationArgs } from '@common/dto/args/pagination.arg';
 import { LikeOnProduct } from './entities/like-on-product.entity';
+import { Product } from '@prisma/client';
 
 @Injectable()
 export class ProductService {
@@ -37,16 +37,10 @@ export class ProductService {
         if (!image)
             return await this.prisma.product.create({
                 data,
-                include: {
-                    category: true,
-                },
             });
 
         const product = await this.prisma.product.create({
             data,
-            include: {
-                category: true,
-            },
         });
 
         const { fileName, url } = await this.s3.uploadFile(image);
@@ -57,9 +51,6 @@ export class ProductService {
                 image: fileName,
                 imageUrl: url,
             },
-            include: {
-                category: true,
-            },
         });
     }
 
@@ -67,9 +58,6 @@ export class ProductService {
         return await this.prisma.product
             .findUniqueOrThrow({
                 where,
-                include: {
-                    category: true,
-                },
             })
             .catch(() => {
                 throw new NotFoundException(`Product ${where.SKU} not found`);
@@ -91,9 +79,6 @@ export class ProductService {
             cursor,
             where,
             orderBy,
-            include: {
-                category: true,
-            },
         });
     }
 
@@ -115,9 +100,6 @@ export class ProductService {
                 categoryId,
             },
             orderBy,
-            include: {
-                category: true,
-            },
         });
     }
 
@@ -141,9 +123,6 @@ export class ProductService {
             data,
             where: {
                 SKU,
-            },
-            include: {
-                category: true,
             },
         });
     }
@@ -169,9 +148,6 @@ export class ProductService {
             where: { SKU },
             data: {
                 available: !product.available,
-            },
-            include: {
-                category: true,
             },
         });
     }
@@ -231,9 +207,6 @@ export class ProductService {
         return await this.prisma.product.delete({
             where: {
                 SKU,
-            },
-            include: {
-                category: true,
             },
         });
     }

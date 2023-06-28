@@ -2,7 +2,7 @@ import { Category } from '@category/entities/category.entity';
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class Product {
+export class ProductEntity {
     @Field(() => Int)
     SKU: number;
 
@@ -23,6 +23,8 @@ export class Product {
 
     @Field(() => Category)
     category: Category;
+
+    categoryId: number;
 
     @Field(() => String, { nullable: true })
     image?: string | null;

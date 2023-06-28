@@ -7,6 +7,7 @@ import { S3MockContext, createS3Mock } from '@mocks/s3.mock';
 import { S3Service } from '@aws/s3.service';
 import { ConfigService } from '@nestjs/config';
 import { CategoryService } from '@category/category.service';
+import { paginationMock } from '@mocks/pagination.mock';
 
 describe('ProductService', () => {
     let service: ProductService;
@@ -54,7 +55,7 @@ describe('ProductService', () => {
                 description: 'lorem ipsum',
                 price: 12.3,
                 stock: 3,
-                category: 'LOREM',
+                categoryId: 1,
             });
 
             // Assert
@@ -64,7 +65,7 @@ describe('ProductService', () => {
 
         it('should fail when create a product that already exists', async () => {
             // Arrange
-            prisma.product.findUnique.mockResolvedValueOnce(productMock);
+            prisma.product.findUniqueOrThrow.mockResolvedValueOnce(productMock);
 
             // Act & Assert
             await expect(
@@ -73,7 +74,7 @@ describe('ProductService', () => {
                     description: 'lorem ipsum',
                     price: 12.3,
                     stock: 3,
-                    category: 'LOREM',
+                    categoryId: 1,
                 })
             ).rejects.toThrow('Product already exists');
         });
@@ -108,11 +109,8 @@ describe('ProductService', () => {
             // Arrange
             prisma.product.findMany.mockResolvedValue(allProductsMock);
 
-            const page = '1';
-            const limit = '15';
-
             // Act
-            const result = await service.findAll({ page, limit });
+            const result = await service.findAll(paginationMock);
 
             // Assert
             expect(result).toHaveLength(3);
@@ -126,7 +124,10 @@ describe('ProductService', () => {
             prisma.product.findMany.mockResolvedValueOnce(allProductsMock);
 
             // Act
-            const result = await service.getProductByCategory(1);
+            const result = await service.getProductByCategory(
+                1,
+                paginationMock
+            );
 
             // Assert
             expect(result).toHaveLength(3);
@@ -145,6 +146,7 @@ describe('ProductService', () => {
             // Act
             const result = await service.update(productMock.SKU, {
                 name: 'updated product ',
+                SKU: 1,
             });
 
             // Assert
@@ -158,7 +160,10 @@ describe('ProductService', () => {
 
             // Act & assert
             await expect(
-                service.update(1000, { name: 'updated product' })
+                service.update(1000, {
+                    name: 'updated product',
+                    SKU: 1,
+                })
             ).rejects.toThrow('Product 1000 not found');
         });
     });
