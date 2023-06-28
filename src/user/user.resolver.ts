@@ -20,8 +20,7 @@ export class UserResolver {
         return this.userService.create(createUserInput);
     }
 
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Role('MANAGER')
+    @UseGuards(JwtAuthGuard)
     @Mutation(() => User, { name: 'updateUser' })
     async updateUser(
         @Args('updateUserInput') updateUserInput: UpdateUserInput

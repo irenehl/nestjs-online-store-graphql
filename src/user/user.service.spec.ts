@@ -5,6 +5,8 @@ import { MockContext, createMockContext } from '@mocks/prisma.mock';
 import { allUsersMock, userMock } from './mocks/user.mock';
 import { ConfigService } from '@nestjs/config';
 import { SesService } from '@aws/ses.service';
+import { createSESMock } from '@mocks/ses.mock';
+import { paginationMock } from '@mocks/pagination.mock';
 
 describe('UserService', () => {
     let service: UserService;
@@ -16,6 +18,8 @@ describe('UserService', () => {
         })
             .overrideProvider(PrismaService)
             .useValue(createMockContext())
+            .overrideProvider(SesService)
+            .useValue(createSESMock())
             .compile();
 
         service = module.get<UserService>(UserService);
@@ -96,11 +100,8 @@ describe('UserService', () => {
             // Arrange
             prisma.user.findMany.mockResolvedValueOnce(allUsersMock);
 
-            const page = '1';
-            const limit = '15';
-
             // Act
-            const result = await service.findAll({ page, limit });
+            const result = await service.findAll(paginationMock);
 
             // Assert
             expect(result).toMatchObject(allUsersMock);
