@@ -15,10 +15,15 @@ import cartAlertHtml from '../mail/cart-alert.html';
 export class OrderService {
     constructor(private prisma: PrismaService, private ses: SesService) {}
 
-    async findOne(where: Prisma.OrderWhereUniqueInput) {
-        return this.prisma.order.findUniqueOrThrow({ where }).catch(() => {
-            throw new NotFoundException('Order not found');
-        });
+    async findOne(where: Prisma.OrderWhereUniqueInput): Promise<any> {
+        const a = await this.prisma.order
+            .findUniqueOrThrow({ where })
+            .catch(() => {
+                throw new NotFoundException('Order not found');
+            });
+        console.log(a);
+
+        return a;
     }
 
     async findAll(

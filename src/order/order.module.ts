@@ -9,6 +9,7 @@ import { CategoryService } from 'src/category/category.service';
 import { ConfigService } from '@nestjs/config';
 import { S3Service } from 'src/aws/s3.service';
 import { SesService } from '@aws/ses.service';
+import { OrderResolver } from './order.resolver';
 
 @Module({
     imports: [AwsModule],
@@ -21,6 +22,7 @@ import { SesService } from '@aws/ses.service';
         ConfigService,
         S3Service,
         SesService,
+        OrderResolver,
     ],
     controllers: [OrderController],
 })
