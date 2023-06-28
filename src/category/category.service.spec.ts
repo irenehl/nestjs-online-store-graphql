@@ -3,6 +3,7 @@ import { CategoryService } from './category.service';
 import { PrismaService } from '@config/prisma.service';
 import { MockContext, createMockContext } from '@mocks/prisma.mock';
 import { allCategoryMock, categoryMock } from './mocks/category.mock';
+import { paginationMock } from '@mocks/pagination.mock';
 
 describe('CategoryService', () => {
     let service: CategoryService;
@@ -85,7 +86,7 @@ describe('CategoryService', () => {
             prisma.category.findMany.mockResolvedValueOnce(allCategoryMock);
 
             // Act
-            const result = await service.findAll({ page: '1', limit: '15' });
+            const result = await service.findAll(paginationMock);
 
             // Assert
             expect(result).toHaveLength(3);

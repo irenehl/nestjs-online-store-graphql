@@ -4,9 +4,10 @@ import {
     Injectable,
     NotFoundException,
 } from '@nestjs/common';
-import { AddProductToCartDto } from './dtos/add-product.dto';
-import { CartDto } from './dtos/cart.dto';
 import { ProductService } from '@product/product.service';
+import { AddProductToCartInput } from './dtos/inputs/add-product.input';
+import { ProductOnCart } from './entitties/product-on-cart.entity';
+import { Cart } from '@prisma/client';
 
 @Injectable()
 export class CartService {
@@ -15,28 +16,25 @@ export class CartService {
         private productService: ProductService
     ) {}
 
-    async findOne(userId: number) {
-        return this.prisma.cart
+    async findOne(userId: number): Promise<Cart> {
+        const a = await this.prisma.cart
             .findFirstOrThrow({
                 where: { userId },
                 include: {
-                    products: {
-                        select: {
-                            product: true,
-                            quantity: true,
-                        },
-                    },
+                    products: true,
                 },
             })
             .catch(() => {
                 throw new NotFoundException('Cart not found');
             });
+
+        return a;
     }
 
     async addProduct(
         userId: number,
-        data: AddProductToCartDto
-    ): Promise<CartDto> {
+        data: AddProductToCartInput
+    ): Promise<any> {
         if (!(await this.productService.isAvailable(data.SKU, data.quantity)))
             throw new BadRequestException('Quantity exceeds current stock');
 
@@ -57,13 +55,13 @@ export class CartService {
             update: {
                 quantity: data.quantity,
             },
-            select: {
-                product: true,
-                quantity: true,
-            },
         });
 
-        return CartDto.toDto(await this.findOne(cart.userId));
+        const b = await this.findOne(cart.userId);
+
+        console.log(b);
+
+        return b;
     }
 
     async deleteProductOnCart(userId: number, SKU: number) {
@@ -97,6 +95,6 @@ export class CartService {
             },
         });
 
-        return CartDto.toDto(await this.findOne(cart.userId));
+        return await this.findOne(cart.userId);
     }
 }

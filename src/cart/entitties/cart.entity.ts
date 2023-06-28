@@ -1,7 +1,8 @@
-import { Field, Int } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ProductOnCart } from './product-on-cart.entity';
 
-export class Cart {
+@ObjectType()
+export class CartEntity {
     @Field(() => Int)
     id: number;
 
@@ -9,5 +10,5 @@ export class Cart {
     userId: number;
 
     @Field(() => ProductOnCart)
-    items: ProductOnCart[];
+    products: ProductOnCart[];
 }

@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { CartService } from './cart.service';
-import { CartController } from './cart.controller';
 import { PrismaService } from '@config/prisma.service';
 import { ProductService } from '@product/product.service';
 import { AwsModule } from 'src/aws/aws.module';
@@ -20,6 +19,5 @@ import { CartResolver } from './cart.resolver';
         CategoryService,
         CartResolver,
     ],
-    controllers: [CartController],
 })
 export class CartModule {}
