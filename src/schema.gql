@@ -47,7 +47,7 @@ type ProductOnCart {
 type CartEntity {
   id: Int!
   userId: Int!
-  products: ProductOnCart!
+  items: ProductOnCart!
 }
 
 type Order {
@@ -82,8 +82,8 @@ type Mutation {
   deleteProduct(SKU: Int!): ProductEntity!
   toggleProduct(SKU: Int!): ProductEntity!
   likeProduct(SKU: Int!): LikeOnProduct!
-  addProductToCart(addProductsToCartInput: AddProductToCartInput!): ProductOnCart!
-  deleteProductToCart(SKU: Int!): CartEntity!
+  addProductToCart(addProductsToCartInput: AddProductToCartInput!): CartEntity!
+  deleteProductOnCart(SKU: Int!): CartEntity!
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
   deleteCategory(id: Int!): Category!
