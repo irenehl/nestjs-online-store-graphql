@@ -1,6 +1,6 @@
 import { Role } from '@prisma/client';
 
-export class PayloadDto {
+export class Payload {
     role: Role;
     email: string;
     sub: string;

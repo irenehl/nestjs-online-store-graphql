@@ -7,10 +7,10 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '@user/user.service';
 import * as bcrypt from 'bcrypt';
-import { TokenDto } from './dtos/token.dto';
 import { ResetPasswordInput } from '@user/dtos/inputs/reset-password.input';
 import { RequestPasswordInput } from '@user/dtos/inputs/request-password.input';
 import { LoginInput } from './dtos/inputs/login.input';
+import { Token } from './types/token.type';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +20,7 @@ export class AuthService {
         private configService: ConfigService
     ) {}
 
-    async login({ email, password }: LoginInput): Promise<TokenDto> {
+    async login({ email, password }: LoginInput): Promise<Token> {
         const user = await this.userService.findOne({ email });
 
         if (!(await bcrypt.compare(password, user.password)))

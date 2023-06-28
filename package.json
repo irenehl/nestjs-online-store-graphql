@@ -90,13 +90,18 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s",
       "!**/*.dto.(t|j)s",
+      "!**/*.arg.(t|j)s",
+      "!**/*.input.(t|j)s",
       "!**/*.module.(t|j)s",
       "!**/*.guard.(t|j)s",
       "!**/*.strategy.(t|j)s",
       "!**/*.decorator.(t|j)s",
       "!**/*.validator.(t|j)s",
+      "!**/*.entity.(t|j)s",
       "!**/*.pipe.(t|j)s",
+      "!**/*.type.(t|j)s",
       "!**/*.html.(t|j)s",
+      "!**/*.enum.(t|j)s",
       "!**/*.mock.(t|j)s",
       "!**/*main.(t|j)s",
       "!**/config/*"

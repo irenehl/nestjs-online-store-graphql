@@ -16,12 +16,17 @@ type Token {
   access_token: String!
 }
 
+type LikeOnProduct {
+  userId: Int!
+  productSKU: Int!
+}
+
 type Category {
   id: ID!
   name: String!
 }
 
-type Product {
+type ProductEntity {
   SKU: Int!
   name: String!
   description: String!
@@ -33,18 +38,34 @@ type Product {
   imageUrl: String
 }
 
-type LikeOnProduct {
-  userId: Int!
+type ProductOnCart {
+  quantity: Int!
+  cartId: Int!
   productSKU: Int!
+}
+
+type CartEntity {
+  id: Int!
+  userId: Int!
+  products: ProductOnCart!
+}
+
+type Order {
+  id: Int!
+  userId: Int!
+  total: Float!
+  items: [ProductOnCart!]!
 }
 
 type Query {
   findOneUser(id: Int!): User!
   findAllUsers(page: Int! = 1, limit: Int! = 15): [User!]!
   getMyFavoriteList(SKU: Int!): [LikeOnProduct!]!
-  getProductsByCategory(categoryId: Int!, page: Int! = 1, limit: Int! = 15): [Product!]!
-  findOneProduct(SKU: Int!): Product!
-  findAllProducts(page: Int! = 1, limit: Int! = 15): [Product!]!
+  getProductsByCategory(categoryId: Int!, page: Int! = 1, limit: Int! = 15): [ProductEntity!]!
+  findOneProduct(SKU: Int!): ProductEntity!
+  findAllProducts(page: Int! = 1, limit: Int! = 15): [ProductEntity!]!
+  findMyCart: CartEntity!
+  getMyOrder(id: Int!): Order!
   findOneCategory(id: Int!): Category!
   findAllCategories(page: Int! = 1, limit: Int! = 15): [Category!]!
 }
@@ -56,11 +77,13 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   deleteUser(id: ID!): User!
-  createProduct(createProductInput: CreateProductInput!): Product!
-  updateProduct(updateProductInput: UpdateProductInput!): Product!
-  deleteProduct(SKU: Int!): Product!
-  toggleProduct(SKU: Int!): Product!
+  createProduct(createProductInput: CreateProductInput!): ProductEntity!
+  updateProduct(updateProductInput: UpdateProductInput!): ProductEntity!
+  deleteProduct(SKU: Int!): ProductEntity!
+  toggleProduct(SKU: Int!): ProductEntity!
   likeProduct(SKU: Int!): LikeOnProduct!
+  addProductToCart(addProductsToCartInput: AddProductToCartInput!): ProductOnCart!
+  deleteProductToCart(SKU: Int!): CartEntity!
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
   deleteCategory(id: Int!): Category!
@@ -116,6 +139,11 @@ input UpdateProductInput {
   stock: Int
   available: Boolean
   categoryId: Int
+}
+
+input AddProductToCartInput {
+  SKU: Int!
+  quantity: Int!
 }
 
 input CreateCategoryInput {
