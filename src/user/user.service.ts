@@ -45,7 +45,10 @@ export class UserService {
     }
 
     async create(data: Prisma.UserCreateInput) {
-        if (await this.exists({ email: data.email }))
+        if (
+            (await this.exists({ email: data.email })) ||
+            (await this.exists({ username: data.username }))
+        )
             throw new ConflictException('User already exists');
 
         const hashedPwd = await bcrypt.hash(data.password, this.salt);
@@ -87,16 +90,6 @@ export class UserService {
             take: Number(limit),
             cursor,
             where,
-            select: {
-                id: true,
-                name: true,
-                lastname: true,
-                username: true,
-                email: true,
-                recovery: true,
-                role: true,
-                password: true,
-            },
             orderBy,
         });
     }

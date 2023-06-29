@@ -15,22 +15,32 @@ describe('AuthResolver', () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
                 AuthResolver,
-                AuthService,
-                UserService,
-                JwtService,
-                ConfigService,
-                PrismaService,
-                SesService,
+                {
+                    provide: AuthService,
+                    useValue: {
+                        login: jest.fn(() => ({
+                            access_token: 'token',
+                        })),
+                    },
+                },
             ],
-        })
-            .overrideProvider(SesService)
-            .useValue(createSESMock())
-            .compile();
+        }).compile();
 
         resolver = module.get<AuthResolver>(AuthResolver);
     });
 
     it('should be defined', () => {
         expect(resolver).toBeDefined();
+    });
+
+    describe('login', () => {
+        it('should login an user', async () => {
+            expect(
+                await resolver.login({
+                    email: 'example@example.com',
+                    password: 'test',
+                })
+            ).toBeDefined();
+        });
     });
 });

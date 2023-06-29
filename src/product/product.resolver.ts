@@ -78,11 +78,8 @@ export class ProductResolver {
     }
 
     @Query(() => [LikeOnProduct], { name: 'getMyFavoriteList' })
-    async getFavorites(
-        @UserDecorator() user: User,
-        @Args('SKU', { type: () => Int }) SKU: number
-    ): Promise<LikeOnProduct[]> {
-        return this.productService.getFavoriteList(user.id, SKU);
+    async getFavorites(@UserDecorator() user: User): Promise<LikeOnProduct[]> {
+        return this.productService.getFavoriteList(user.id);
     }
 
     @Public()

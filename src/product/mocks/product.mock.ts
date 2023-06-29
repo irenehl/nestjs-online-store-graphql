@@ -49,3 +49,18 @@ export const allProductsMock = [
         categoryId: 1,
     },
 ];
+
+export const likesOnProductsMock = [
+    {
+        userId: 1,
+        productSKU: 3,
+    },
+    {
+        userId: 1,
+        productSKU: 5,
+    },
+    {
+        userId: 1,
+        productSKU: 2,
+    },
+];

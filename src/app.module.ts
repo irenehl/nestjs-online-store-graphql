@@ -18,6 +18,9 @@ import { join } from 'path';
             autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
             playground: false,
             plugins: [ApolloServerPluginLandingPageLocalDefault()],
+            formatError: (error) => {
+                return { message: error.message };
+            },
         }),
         AuthModule,
         UserModule,

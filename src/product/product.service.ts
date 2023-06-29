@@ -179,14 +179,10 @@ export class ProductService {
               });
     }
 
-    async getFavoriteList(
-        userId: number,
-        SKU: number
-    ): Promise<LikeOnProduct[]> {
+    async getFavoriteList(userId: number): Promise<LikeOnProduct[]> {
         return this.prisma.likesOnProducts.findMany({
             where: {
                 userId,
-                productSKU: SKU,
             },
         });
     }

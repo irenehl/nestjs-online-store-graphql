@@ -2,7 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ProductService } from './product.service';
 import { PrismaService } from '@config/prisma.service';
 import { MockContext, createMockContext } from '@mocks/prisma.mock';
-import { allProductsMock, productMock } from './mocks/product.mock';
+import {
+    allProductsMock,
+    likesOnProductsMock,
+    productMock,
+} from './mocks/product.mock';
 import { S3MockContext, createS3Mock } from '@mocks/s3.mock';
 import { S3Service } from '@aws/s3.service';
 import { ConfigService } from '@nestjs/config';
@@ -145,6 +149,10 @@ describe('ProductService', () => {
                 ...productMock,
                 name: 'updated product',
             });
+            s3.generatePresignedUrl.mockResolvedValueOnce({
+                uploadUrl: 'https://www.google.com',
+                key: 'key',
+            });
 
             // Act
             const result = await service.update(productMock.SKU, {
@@ -238,6 +246,15 @@ describe('ProductService', () => {
 
             // Assert
             expect(result).toEqual({ userId: 3, productSKU: productMock.SKU });
+        });
+    });
+
+    describe('getFavoriteList', () => {
+        it('should get all favorite lists', async () => {
+            // Arrange
+            prisma.likesOnProducts.findMany.mockResolvedValueOnce(
+                likesOnProductsMock
+            );
         });
     });
 

@@ -14,6 +14,7 @@ import { createSESMock } from '@mocks/ses.mock';
 describe('AuthService', () => {
     let service: AuthService;
     let prisma: MockContext;
+    let ses: SesService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -36,6 +37,7 @@ describe('AuthService', () => {
 
         service = module.get<AuthService>(AuthService);
         prisma = module.get<MockContext>(PrismaService);
+        ses = module.get<SesService>(SesService);
     });
 
     it('should be defined', () => {
@@ -88,6 +90,7 @@ describe('AuthService', () => {
 
             // Assert
             expect(result).toHaveProperty('recovery');
+            expect(ses.sendEmail).toHaveBeenCalled();
         });
     });
 

@@ -60,7 +60,7 @@ type OrderEntity {
 type Query {
   findOneUser(id: Int!): UserEntity!
   findAllUsers(page: Int! = 1, limit: Int! = 15): [UserEntity!]!
-  getMyFavoriteList(SKU: Int!): [LikeOnProduct!]!
+  getMyFavoriteList: [LikeOnProduct!]!
   getProductsByCategory(categoryId: Int!, page: Int! = 1, limit: Int! = 15): [ProductEntity!]!
   findOneProduct(SKU: Int!): ProductEntity!
   findAllProducts(page: Int! = 1, limit: Int! = 15): [ProductEntity!]!

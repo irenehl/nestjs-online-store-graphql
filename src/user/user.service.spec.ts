@@ -60,14 +60,15 @@ describe('UserService', () => {
         it('should add user', async () => {
             // Arrange
             prisma.user.findUnique.mockResolvedValueOnce(null);
+            prisma.user.findUnique.mockResolvedValueOnce(null);
             prisma.user.create.mockResolvedValueOnce(userMock);
 
             // Act
             const result = await service.create({
-                email: 'danielalopez+admin@ravn.co',
+                email: 'email+admin@.com',
                 name: 'Daniela',
                 lastname: 'Lopez',
-                username: 'daniela',
+                username: 'username',
                 password: 'pass123',
                 role: 'CLIENT',
             });
@@ -79,6 +80,7 @@ describe('UserService', () => {
 
         it('should create a MANAGER', async () => {
             // Arrange
+            prisma.user.findUnique.mockResolvedValueOnce(null);
             prisma.user.findUnique.mockResolvedValueOnce(null);
             prisma.user.create.mockResolvedValueOnce(userMock);
 
