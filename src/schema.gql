@@ -2,7 +2,7 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
+type UserEntity {
   id: ID!
   name: String!
   lastname: String!
@@ -50,7 +50,7 @@ type CartEntity {
   items: [ProductOnCart!]!
 }
 
-type Order {
+type OrderEntity {
   id: Int!
   userId: Int!
   total: Float!
@@ -58,25 +58,26 @@ type Order {
 }
 
 type Query {
-  findOneUser(id: Int!): User!
-  findAllUsers(page: Int! = 1, limit: Int! = 15): [User!]!
+  findOneUser(id: Int!): UserEntity!
+  findAllUsers(page: Int! = 1, limit: Int! = 15): [UserEntity!]!
   getMyFavoriteList(SKU: Int!): [LikeOnProduct!]!
   getProductsByCategory(categoryId: Int!, page: Int! = 1, limit: Int! = 15): [ProductEntity!]!
   findOneProduct(SKU: Int!): ProductEntity!
   findAllProducts(page: Int! = 1, limit: Int! = 15): [ProductEntity!]!
   findMyCart: CartEntity!
-  getMyOrder(id: Int!): Order!
+  getMyOrder(id: Int!): OrderEntity!
+  getAllOrders(page: Int! = 1, limit: Int! = 15): [OrderEntity!]!
   findOneCategory(id: Int!): Category!
   findAllCategories(page: Int! = 1, limit: Int! = 15): [Category!]!
 }
 
 type Mutation {
   login(loginInput: LoginInput!): Token!
-  resetPasswordRequest(requestPasswordInput: RequestPasswordInput!): Boolean!
+  resetPasswordRequest(requestPasswordInput: RequestPasswordInput!): UserEntity!
   setNewPassword(resetPasswordInput: ResetPasswordInput!, token: String!): String!
-  createUser(createUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
-  deleteUser(id: ID!): User!
+  createUser(createUserInput: CreateUserInput!): UserEntity!
+  updateUser(updateUserInput: UpdateUserInput!): UserEntity!
+  deleteUser: UserEntity!
   createProduct(createProductInput: CreateProductInput!): ProductEntity!
   updateProduct(updateProductInput: UpdateProductInput!): ProductEntity!
   deleteProduct(SKU: Int!): ProductEntity!
@@ -84,6 +85,7 @@ type Mutation {
   likeProduct(SKU: Int!): LikeOnProduct!
   addProductToCart(addProductsToCartInput: AddProductToCartInput!): CartEntity!
   deleteProductOnCart(SKU: Int!): CartEntity!
+  placeOrder(userId: Int!): OrderEntity!
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
   deleteCategory(id: Int!): Category!
@@ -113,7 +115,6 @@ input CreateUserInput {
 }
 
 input UpdateUserInput {
-  id: Int!
   name: String
   lastname: String
   email: String
