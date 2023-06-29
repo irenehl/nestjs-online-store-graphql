@@ -70,6 +70,6 @@ export class CategoryService {
     async delete(where: Prisma.CategoryWhereUniqueInput): Promise<Category> {
         const _ = await this.findOne(where);
 
-        return await this.prisma.category.delete({ where });
+        return this.prisma.category.delete({ where });
     }
 }
