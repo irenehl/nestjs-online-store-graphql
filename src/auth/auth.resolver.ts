@@ -4,6 +4,8 @@ import { Token } from './types/token.type';
 import { LoginInput } from './dtos/inputs/login.input';
 import { RequestPasswordInput } from '@user/dtos/inputs/request-password.input';
 import { ResetPasswordInput } from '@user/dtos/inputs/reset-password.input';
+import { User } from '@prisma/client';
+import { UserEntity } from '@user/entitites/user.entity';
 
 @Resolver()
 export class AuthResolver {
@@ -14,10 +16,10 @@ export class AuthResolver {
         return this.authService.login(loginInput);
     }
 
-    @Mutation(() => Boolean, { name: 'resetPasswordRequest' })
+    @Mutation(() => UserEntity, { name: 'resetPasswordRequest' })
     async resetRequest(
         @Args('requestPasswordInput') requestPasswordInput: RequestPasswordInput
-    ): Promise<boolean> {
+    ): Promise<User> {
         return this.authService.resetRequest(requestPasswordInput);
     }
 
