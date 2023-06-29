@@ -94,7 +94,7 @@ You can see all the implementations and relations in the [prisma schema](./prism
 
 ## Endpoints
 
-You can test all the functionalities with this [endpoints](./src/docs/nestjs-challenge.json), also if you're running locally, vist [this link](http://localhost:3000/api#)
+This API is using GraphQL implementation, check the endpoints [here](http://localhost:3000/graphql)
 
 ## Extra points
 - [X] When the stock of a product reaches 3, notify the last user that liked it and not purchased the product yet with an email. Use a background job and make sure to include the product's image in the email.
