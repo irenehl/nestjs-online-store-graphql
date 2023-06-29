@@ -139,6 +139,7 @@ export class OrderService {
                 })
             );
 
+            // TODO: Send img
             if (notifications && notifications.length > 0) {
                 await Promise.all(
                     notifications.map(async (notification) =>

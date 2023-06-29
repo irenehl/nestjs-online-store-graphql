@@ -18,24 +18,10 @@ export const cartMock = {
     ],
 };
 
-export const failCartMock = {
-    id: 3,
-    userId: 10,
-    products: [
-        {
-            product: {
-                SKU: 1,
-                name: 'product 1',
-                description: 'lorem ipsum',
-                price: 12.3,
-                stock: 0,
-                image: null,
-                available: true,
-                category: 'LOREM',
-            },
-            quantity: 2,
-        },
-    ],
+export const emptyCartMock = {
+    id: 2,
+    userId: 1,
+    products: [],
 };
 
 export const productsOnCartsMock = {

@@ -4,9 +4,8 @@ import {
     Injectable,
     NotFoundException,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Category, Prisma } from '@prisma/client';
 import { PaginationArgs } from '@common/dto/args/pagination.arg';
-import { Category } from './entities/category.entity';
 
 @Injectable()
 export class CategoryService {
@@ -44,15 +43,13 @@ export class CategoryService {
     ): Promise<Category[]> {
         const { page, limit, cursor, where, orderBy } = params;
 
-        const a = await this.prisma.category.findMany({
+        return this.prisma.category.findMany({
             skip: Number(page) - 1,
             take: Number(limit),
             cursor,
             where,
             orderBy,
         });
-
-        return a;
     }
 
     async update(

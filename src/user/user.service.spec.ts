@@ -77,6 +77,26 @@ describe('UserService', () => {
             expect(prisma.user.create).toHaveBeenCalled();
         });
 
+        it('should create a MANAGER', async () => {
+            // Arrange
+            prisma.user.findUnique.mockResolvedValueOnce(null);
+            prisma.user.create.mockResolvedValueOnce(userMock);
+
+            // Act
+            const result = await service.create({
+                email: 'danielalopez+admin@ravn.co',
+                name: 'Daniela',
+                lastname: 'Lopez',
+                username: 'daniela',
+                password: 'pass123',
+                role: 'MANAGER',
+            });
+
+            // Assert
+            expect(result).toHaveProperty('id', expect.any(Number));
+            expect(prisma.user.create).toHaveBeenCalled();
+        });
+
         it('should fail when create a new user and user already exists', async () => {
             // Arrange
             prisma.user.findUnique.mockResolvedValue(userMock);

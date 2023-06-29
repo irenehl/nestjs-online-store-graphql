@@ -10,9 +10,13 @@ import {
 import { OrderService } from './order.service';
 import { OrderEntity } from './entities/order.entity';
 import { PaginationArgs } from '@common/dto/args/pagination.arg';
-import { Order } from '@prisma/client';
+import { Order, User } from '@prisma/client';
+import { UserDecorator } from '@user/decorators/user.decorator';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 
 @Resolver(() => OrderEntity)
+@UseGuards(JwtAuthGuard)
 export class OrderResolver {
     constructor(private readonly orderService: OrderService) {}
 
@@ -27,8 +31,8 @@ export class OrderResolver {
     }
 
     @Mutation(() => OrderEntity, { name: 'placeOrder' })
-    async placeOrder(@Args('userId', { type: () => Int }) userId: number) {
-        return this.orderService.placeOrder(userId);
+    async placeOrder(@UserDecorator() user: User) {
+        return this.orderService.placeOrder(user.id);
     }
 
     @ResolveField()

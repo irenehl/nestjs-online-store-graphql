@@ -30,7 +30,6 @@ export class ProductResolver {
         private readonly caategoryService: CategoryService
     ) {}
 
-    // TODO: Missing img
     @UseGuards(RolesGuard)
     @Role('MANAGER')
     @Mutation(() => ProductEntity, { name: 'createProduct' })
@@ -40,7 +39,6 @@ export class ProductResolver {
         return this.productService.create(createProductInput);
     }
 
-    // TODO: Missing img
     @UseGuards(RolesGuard)
     @Role('MANAGER')
     @Mutation(() => ProductEntity, { name: 'updateProduct' })

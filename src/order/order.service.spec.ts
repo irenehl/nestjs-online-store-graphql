@@ -5,11 +5,16 @@ import { MockContext, createMockContext } from '@mocks/prisma.mock';
 import { ProductService } from './../product/product.service';
 import {
     allOrdersMock,
+    allProductsOnCart,
     orderMock,
     productsOnOrdersMock,
 } from './mocks/order.mock';
 import { CartService } from '@cart/cart.service';
-import { cartMock, productsOnCartsMock } from '@cart/mocks/cart.mock';
+import {
+    cartMock,
+    emptyCartMock,
+    productsOnCartsMock,
+} from '@cart/mocks/cart.mock';
 import { productMock } from '@product/mocks/product.mock';
 import { SesService } from '@aws/ses.service';
 import { createSESMock } from '@mocks/ses.mock';
@@ -134,6 +139,35 @@ describe('OrderService', () => {
             await expect(service.placeOrder(1)).rejects.toThrow(
                 'Cart not found'
             );
+        });
+
+        it('should fail when place order when cart is empyt', async () => {
+            // Arrange
+            prisma.$transaction.mockImplementationOnce(async (callback) => {
+                await callback(prisma);
+                return orderMock;
+            });
+            prisma.cart.findFirstOrThrow.mockResolvedValue(emptyCartMock);
+
+            // Act & Assert
+            await expect(service.placeOrder(1)).rejects.toThrow(
+                "There's no products in user cart"
+            );
+        });
+    });
+
+    describe('findProductsOnOrders', () => {
+        it('should find all products on orders', async () => {
+            // Arrange
+            prisma.productsOnOrders.findMany.mockResolvedValue(
+                allProductsOnCart
+            );
+
+            // Act
+            const result = await service.findProductsOnOrders(1);
+
+            // Assert
+            expect(result).toHaveLength(3);
         });
     });
 });

@@ -35,12 +35,12 @@ export class UserResolver {
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => UserEntity, { name: 'deleteUser' })
-    async deleteUser(@UserDecorator() user: User): Promise<User> {
+    async delete(@UserDecorator() user: User): Promise<User> {
         return this.userService.delete(user.id);
     }
 
     @Query(() => UserEntity, { name: 'findOneUser' })
-    async getOne(@Args('id', { type: () => Int }) id: number) {
+    async getOne(@Args('id', { type: () => Int }) id: number): Promise<User> {
         return this.userService.findOne({ id });
     }
 

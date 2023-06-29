@@ -1,4 +1,4 @@
-import { Category } from '@category/entities/category.entity';
+import { CategoryEntity } from '@category/entities/category.entity';
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
@@ -21,8 +21,8 @@ export class ProductEntity {
     @Field(() => Boolean)
     available: boolean;
 
-    @Field(() => Category)
-    category: Category;
+    @Field(() => CategoryEntity)
+    category: CategoryEntity;
 
     categoryId: number;
 

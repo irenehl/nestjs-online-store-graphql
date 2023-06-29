@@ -97,14 +97,20 @@ export class ProductService {
 
     async update(
         SKU: number,
-        data: UpdateProductInput & { image?: string; imageUrl?: string },
-        image?: Express.Multer.File
+        data: UpdateProductInput & { image?: string; imageUrl?: string }
     ): Promise<Product> {
-        const product = await this.findOne({ SKU });
-        const imageUrl = await this.s3.generatePresignedUrl(`SKU-${SKU}-`);
+        const _ = await this.findOne({ SKU });
+
+        const { uploadUrl, key } = await this.s3.generatePresignedUrl(
+            `SKU-${data.name}`
+        );
 
         return this.prisma.product.update({
-            data,
+            data: {
+                ...data,
+                image: key,
+                imageUrl: uploadUrl,
+            },
             where: {
                 SKU,
             },

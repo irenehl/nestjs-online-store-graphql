@@ -21,7 +21,7 @@ type LikeOnProduct {
   productSKU: Int!
 }
 
-type Category {
+type CategoryEntity {
   id: ID!
   name: String!
 }
@@ -33,7 +33,7 @@ type ProductEntity {
   price: Float!
   stock: Int!
   available: Boolean!
-  category: Category!
+  category: CategoryEntity!
   image: String
   imageUrl: String
 }
@@ -67,8 +67,8 @@ type Query {
   findMyCart: CartEntity!
   getMyOrder(id: Int!): OrderEntity!
   getAllOrders(page: Int! = 1, limit: Int! = 15): [OrderEntity!]!
-  findOneCategory(id: Int!): Category!
-  findAllCategories(page: Int! = 1, limit: Int! = 15): [Category!]!
+  findOneCategory(id: Int!): CategoryEntity!
+  findAllCategories(page: Int! = 1, limit: Int! = 15): [CategoryEntity!]!
 }
 
 type Mutation {
@@ -85,10 +85,10 @@ type Mutation {
   likeProduct(SKU: Int!): LikeOnProduct!
   addProductToCart(addProductsToCartInput: AddProductToCartInput!): CartEntity!
   deleteProductOnCart(SKU: Int!): CartEntity!
-  placeOrder(userId: Int!): OrderEntity!
-  createCategory(createCategoryInput: CreateCategoryInput!): Category!
-  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
-  deleteCategory(id: Int!): Category!
+  placeOrder: OrderEntity!
+  createCategory(createCategoryInput: CreateCategoryInput!): CategoryEntity!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): CategoryEntity!
+  deleteCategory(id: Int!): CategoryEntity!
 }
 
 input LoginInput {

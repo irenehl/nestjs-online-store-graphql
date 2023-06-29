@@ -44,15 +44,31 @@ describe('AuthService', () => {
 
     describe('login', () => {
         it('should generate a token from an user', async () => {
-            prisma.user.findUniqueOrThrow.mockResolvedValueOnce(userMock);
             // Arrange
+
+            prisma.user.findUniqueOrThrow.mockResolvedValueOnce(userMock);
+
+            // Act
             const result = await service.login({
                 email: 'danielalopez+client@ravn.co',
                 password: 'pass123',
             });
 
-            // Act & Assert
+            // Assert
             expect(result).toHaveProperty('access_token', expect.any(String));
+        });
+
+        it('should fail when receive wrong credentials', async () => {
+            // Arrange
+            prisma.user.findUniqueOrThrow.mockResolvedValue(userMock);
+
+            // Act && Assert
+            expect(
+                service.login({
+                    email: 'danielalopez+client@ravn.co',
+                    password: 'pass123!!!',
+                })
+            ).rejects.toThrow('Wrong credentials');
         });
     });
 
