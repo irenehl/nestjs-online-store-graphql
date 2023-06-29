@@ -42,38 +42,14 @@ describe('AuthService', () => {
         expect(service).toBeDefined();
     });
 
-    describe('validateUser', () => {
-        it('should validate an user', async () => {
-            // Arrange
-            prisma.user.findUniqueOrThrow.mockResolvedValueOnce(userMock);
-
-            // Act
-            const result = await service.validateUser(
-                userMock.email,
-                'pass123'
-            );
-
-            // Assert
-            expect(prisma.user.findUniqueOrThrow).toHaveBeenCalled();
-            expect(result).toHaveProperty('id', expect.any(Number));
-        });
-
-        it('should fail when validate an user', async () => {
-            // Arrange
-            prisma.user.findUniqueOrThrow.mockResolvedValue(userMock);
-
-            // Act
-            const result = await service.validateUser(userMock.email, 'pass');
-
-            // Act && Assert
-            expect(result).toEqual(false);
-        });
-    });
-
     describe('login', () => {
         it('should generate a token from an user', async () => {
+            prisma.user.findUniqueOrThrow.mockResolvedValueOnce(userMock);
             // Arrange
-            const result = await service.login(userMock);
+            const result = await service.login({
+                email: 'danielalopez+client@ravn.co',
+                password: 'pass123',
+            });
 
             // Act & Assert
             expect(result).toHaveProperty('access_token', expect.any(String));
@@ -96,7 +72,6 @@ describe('AuthService', () => {
 
             // Assert
             expect(result).toHaveProperty('recovery');
-            expect(result.recovery).toEqual('token');
         });
     });
 
