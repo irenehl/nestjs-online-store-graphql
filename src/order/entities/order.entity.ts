@@ -2,7 +2,7 @@ import { ProductOnCart } from '@cart/entitties/product-on-cart.entity';
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class Order {
+export class OrderEntity {
     @Field(() => Int)
     id: number;
 

@@ -1,38 +1,34 @@
-import { IPagination } from '@common/interfaces/pagination.dto';
 import { PrismaService } from '@config/prisma.service';
 import {
     BadRequestException,
     Injectable,
     NotFoundException,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
-import { OrderDto } from './dtos/order.dto';
+import { Order, Prisma } from '@prisma/client';
 import { SesService } from '@aws/ses.service';
-import { StockNotificationDto } from './dtos/stock-notification.dto';
+import { StockNotificationEntity } from './entities/stock-notification.entity';
 import cartAlertHtml from '../mail/cart-alert.html';
+import { PaginationArgs } from '@common/dto/args/pagination.arg';
 
 @Injectable()
 export class OrderService {
     constructor(private prisma: PrismaService, private ses: SesService) {}
 
-    async findOne(where: Prisma.OrderWhereUniqueInput): Promise<any> {
-        const a = await this.prisma.order
-            .findUniqueOrThrow({ where })
-            .catch(() => {
-                throw new NotFoundException('Order not found');
-            });
-
-        return a;
+    async findOne(where: Prisma.OrderWhereUniqueInput): Promise<Order> {
+        return this.prisma.order.findUniqueOrThrow({ where }).catch(() => {
+            throw new NotFoundException('Order not found');
+        });
     }
 
     async findAll(
-        params: IPagination & {
+        params: PaginationArgs & {
             cursor?: Prisma.OrderWhereUniqueInput;
             where?: Prisma.OrderWhereInput;
             orderBy?: Prisma.UserOrderByWithAggregationInput;
         }
-    ) {
+    ): Promise<Order[]> {
         const { page, limit, cursor, where, orderBy } = params;
+
         return this.prisma.order.findMany({
             skip: Number(page) - 1,
             take: Number(limit),
@@ -60,6 +56,11 @@ export class OrderService {
                     throw new NotFoundException('Cart not found');
                 });
 
+            if (cart.products.length == 0)
+                throw new BadRequestException(
+                    "There's no products in user cart"
+                );
+
             const order = await tx.order.create({
                 data: {
                     userId,
@@ -67,7 +68,7 @@ export class OrderService {
             });
 
             let totalAmount = 0;
-            const notifications: StockNotificationDto[] = [];
+            const notifications: StockNotificationEntity[] = [];
 
             await Promise.all(
                 cart.products.map(async ({ product, quantity }) => {
@@ -157,22 +158,18 @@ export class OrderService {
                 );
             }
 
-            return OrderDto.toDto(
-                await tx.order.update({
-                    where: { id: order.id },
-                    data: {
-                        total: totalAmount,
-                    },
-                    include: {
-                        products: {
-                            select: {
-                                product: true,
-                                quantity: true,
-                            },
-                        },
-                    },
-                })
-            );
+            return tx.order.update({
+                where: { id: order.id },
+                data: {
+                    total: totalAmount,
+                },
+            });
+        });
+    }
+
+    async findProductsOnOrders(orderId: number) {
+        return this.prisma.productsOnOrders.findMany({
+            where: { orderId },
         });
     }
 }

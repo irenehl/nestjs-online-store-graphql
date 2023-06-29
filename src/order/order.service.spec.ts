@@ -17,6 +17,7 @@ import { ConfigService } from '@nestjs/config';
 import { S3Service } from '@aws/s3.service';
 import { createS3Mock } from '@mocks/s3.mock';
 import { CategoryService } from '@category/category.service';
+import { paginationMock } from '@mocks/pagination.mock';
 
 describe('OrderService', () => {
     let service: OrderService;
@@ -81,9 +82,7 @@ describe('OrderService', () => {
             prisma.order.findMany.mockResolvedValueOnce(allOrdersMock);
 
             // Act
-            const page = '1';
-            const limit = '15';
-            const result = await service.findAll({ page, limit });
+            const result = await service.findAll(paginationMock);
 
             // Assert
             expect(result).toHaveLength(3);
