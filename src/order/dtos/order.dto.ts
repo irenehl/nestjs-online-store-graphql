@@ -1,4 +1,4 @@
-import { ProductOnCartDto } from '@cart/dtos/product-on-cart.dto';
+// import { ProductOnCartDto } from '@cart/dtos/product-on-cart.dto';
 import { Order } from '@prisma/client';
 import { ProductDto } from '@product/dtos/product.dto';
 
@@ -7,7 +7,7 @@ export class OrderDto {
     userId: number;
     total: number;
 
-    items: ProductOnCartDto[];
+    // items: ProductOnCartDto[];
 
     static toDto(
         order: Order & { products: { product: ProductDto; quantity: number }[] }
@@ -15,7 +15,7 @@ export class OrderDto {
         return {
             id: order.id,
             userId: order.userId,
-            items: order.products,
+            // items: order.products,
             total: order.total,
         };
     }

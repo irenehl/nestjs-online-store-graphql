@@ -44,10 +44,8 @@ export class CartResolver {
         return this.cartService.deleteProductOnCart(user.id, SKU);
     }
 
-    // TODO: Fix this return
     @ResolveField()
     async items(@Parent() cart: Cart) {
-        console.log('product ', cart);
         const { id } = cart;
 
         return this.cartService.findProductsOnCart(id);

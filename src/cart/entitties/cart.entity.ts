@@ -9,6 +9,6 @@ export class CartEntity {
     @Field(() => Int)
     userId: number;
 
-    @Field(() => ProductOnCart)
+    @Field(() => [ProductOnCart])
     items: ProductOnCart[];
 }

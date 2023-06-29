@@ -21,7 +21,6 @@ export class OrderService {
             .catch(() => {
                 throw new NotFoundException('Order not found');
             });
-        console.log(a);
 
         return a;
     }

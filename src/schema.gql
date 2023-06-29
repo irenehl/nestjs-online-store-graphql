@@ -47,7 +47,7 @@ type ProductOnCart {
 type CartEntity {
   id: Int!
   userId: Int!
-  items: ProductOnCart!
+  items: [ProductOnCart!]!
 }
 
 type Order {

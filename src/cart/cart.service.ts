@@ -16,24 +16,19 @@ export class CartService {
     ) {}
 
     async findOne(userId: number): Promise<Cart> {
-        const a = await this.prisma.cart
+        return await this.prisma.cart
             .findFirstOrThrow({
                 where: { userId },
             })
             .catch(() => {
                 throw new NotFoundException('Cart not found');
             });
-
-        return a;
     }
 
     async findProductsOnCart(cartId: number) {
-        const a = await this.prisma.productsOnCarts.findMany({
+        return await this.prisma.productsOnCarts.findMany({
             where: { cartId },
         });
-
-        console.log('productsOnCarts', a);
-        return a;
     }
 
     async addProduct(userId: number, data: AddProductToCartInput) {
@@ -59,9 +54,7 @@ export class CartService {
             },
         });
 
-        const b = await this.findOne(cart.userId);
-
-        return b;
+        return await this.findOne(cart.userId);
     }
 
     async deleteProductOnCart(userId: number, SKU: number) {
