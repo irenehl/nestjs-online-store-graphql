@@ -5,6 +5,7 @@ import {
     ForbiddenException,
     Injectable,
     NotFoundException,
+    UnauthorizedException,
 } from '@nestjs/common';
 import { Prisma, Role, User } from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
@@ -81,7 +82,7 @@ export class UserService {
     ): Promise<User[]> {
         const { page, limit, cursor, where, orderBy } = params;
 
-        return await this.prisma.user.findMany({
+        return this.prisma.user.findMany({
             skip: Number(page) - 1,
             take: Number(limit),
             cursor,
@@ -101,10 +102,14 @@ export class UserService {
     }
 
     async update(userId: number, data: Prisma.UserUpdateInput): Promise<User> {
-        if (!(await this.exists({ id: userId })))
-            throw new NotFoundException('User not found');
+        const user = await this.findOne({ id: userId });
 
-        const user = await this.prisma.user.update({
+        if (user.id !== userId)
+            throw new UnauthorizedException(
+                "You don't have permission to update this user"
+            );
+
+        return this.prisma.user.update({
             data: {
                 ...data,
                 password: data.password
@@ -115,17 +120,17 @@ export class UserService {
                 id: userId,
             },
         });
-
-        return user;
     }
 
     async delete(userId: number): Promise<User> {
-        if (!(await this.exists({ id: userId })))
-            throw new NotFoundException('User not found');
+        const user = await this.findOne({ id: userId });
 
-        const user = await this.prisma.user.delete({ where: { id: userId } });
+        if (user.id !== userId)
+            throw new UnauthorizedException(
+                "You don't have permission to update this user"
+            );
 
-        return user;
+        return this.prisma.user.delete({ where: { id: userId } });
     }
 
     async resetRequest(email: string) {

@@ -112,7 +112,7 @@ describe('UserService', () => {
     describe('update', () => {
         it('should update an user', async () => {
             // Arrange
-            prisma.user.findUnique.mockResolvedValueOnce(userMock);
+            prisma.user.findUniqueOrThrow.mockResolvedValueOnce(userMock);
             prisma.user.update.mockResolvedValueOnce({
                 ...userMock,
                 username: 'daniela',
@@ -128,13 +128,13 @@ describe('UserService', () => {
             // Assert
             expect(prisma.user.update).toHaveBeenCalled();
             expect(result.username).toEqual('daniela');
-            expect(prisma.user.findUnique).toHaveBeenCalled();
+            expect(prisma.user.findUniqueOrThrow).toHaveBeenCalled();
             expect(result).toHaveProperty('id', expect.any(Number));
         });
 
         it('should fail when update an user that does not exists', async () => {
             // Arrange
-            prisma.user.findUnique.mockResolvedValue(null);
+            prisma.user.findUniqueOrThrow.mockResolvedValue(userMock);
 
             const info = {
                 username: 'daniela',
@@ -142,7 +142,7 @@ describe('UserService', () => {
 
             // Act & Assert
             await expect(service.update(1000, info)).rejects.toThrow(
-                'User not found'
+                "You don't have permission to update this user"
             );
         });
     });
@@ -150,7 +150,7 @@ describe('UserService', () => {
     describe('delete', () => {
         it('should delete an user', async () => {
             // Arrange
-            prisma.user.findUnique.mockResolvedValueOnce(userMock);
+            prisma.user.findUniqueOrThrow.mockResolvedValueOnce(userMock);
             prisma.user.delete.mockResolvedValue(userMock);
 
             // Act
@@ -163,11 +163,11 @@ describe('UserService', () => {
 
         it('should fail when delete an user that does not exists', async () => {
             // Arrange
-            prisma.user.findUnique.mockResolvedValueOnce(null);
+            prisma.user.findUniqueOrThrow.mockResolvedValueOnce(userMock);
 
             // Act & assert
             await expect(service.delete(1000)).rejects.toThrow(
-                'User not found'
+                "You don't have permission to update this user"
             );
         });
     });
