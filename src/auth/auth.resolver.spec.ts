@@ -1,12 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
-import { UserService } from '@user/user.service';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import { PrismaService } from '@config/prisma.service';
-import { SesService } from '@aws/ses.service';
-import { createSESMock } from '@mocks/ses.mock';
 
 describe('AuthResolver', () => {
     let resolver: AuthResolver;
