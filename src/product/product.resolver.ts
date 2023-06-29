@@ -8,7 +8,6 @@ import {
     Resolver,
 } from '@nestjs/graphql';
 import { ProductService } from './product.service';
-// import { Product } from './entities/product.entity';
 import { CreateProductInput } from './dtos/input/create-product.input';
 import { UpdateProductInput } from './dtos/input/update-product.input';
 import { PaginationArgs } from '@common/dto/args/pagination.arg';
@@ -19,10 +18,9 @@ import { Role } from '@auth/decorators/role.decorator';
 import { Public } from '@auth/decorators/public.decorator';
 import { LikeOnProduct } from './entities/like-on-product.entity';
 import { CategoryService } from '@category/category.service';
-import { Product } from '@prisma/client';
+import { Product, User } from '@prisma/client';
 import { ProductEntity } from './entities/product.entity';
 import { UserDecorator } from '@user/decorators/user.decorator';
-import { User } from '@user/entitites/user.entity';
 
 @Resolver(() => ProductEntity)
 @UseGuards(JwtAuthGuard)
@@ -38,7 +36,7 @@ export class ProductResolver {
     @Mutation(() => ProductEntity, { name: 'createProduct' })
     async create(
         @Args('createProductInput') createProductInput: CreateProductInput
-    ): Promise<Product> {
+    ) {
         return this.productService.create(createProductInput);
     }
 

@@ -40,7 +40,7 @@ describe('ProductService', () => {
     });
 
     describe('create', () => {
-        it('should create a new product without image', async () => {
+        it('should create a new product', async () => {
             // Arrange
             prisma.product.findUnique.mockResolvedValueOnce(null);
             prisma.category.findFirstOrThrow.mockResolvedValueOnce({
@@ -48,6 +48,10 @@ describe('ProductService', () => {
                 name: '1',
             });
             prisma.product.create.mockResolvedValue(productMock);
+            s3.generatePresignedUrl.mockResolvedValueOnce({
+                uploadUrl: 'https://www.google.com',
+                key: 'key',
+            });
 
             // Act
             const result = await service.create({
@@ -59,13 +63,12 @@ describe('ProductService', () => {
             });
 
             // Assert
-            expect(s3.send).toHaveBeenCalledTimes(0);
             expect(result).toHaveProperty('SKU', expect.any(Number));
         });
 
-        it('should fail when create a product that already exists', async () => {
+        it('should fail when creating a product that already exists', async () => {
             // Arrange
-            prisma.product.findUniqueOrThrow.mockResolvedValueOnce(productMock);
+            prisma.product.findUnique.mockResolvedValueOnce(productMock);
 
             // Act & Assert
             await expect(

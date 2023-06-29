@@ -21,41 +21,33 @@ export class ProductService {
         private categoryService: CategoryService
     ) {}
 
-    async create(
-        data: CreateProductInput,
-        image?: Express.Multer.File
-    ): Promise<Product> {
+    async create(data: CreateProductInput) {
         if (
-            await this.prisma.product.findUniqueOrThrow({
+            await this.prisma.product.findUnique({
                 where: { name: data.name },
             })
         )
             throw new BadRequestException('Product already exists');
 
-        await this.categoryService.findOne({ id: data.categoryId });
-
-        if (!image)
-            return await this.prisma.product.create({
-                data,
-            });
-
-        const product = await this.prisma.product.create({
-            data,
+        await this.categoryService.findOne({
+            id: data.categoryId,
         });
 
-        const { fileName, url } = await this.s3.uploadFile(image);
+        const { uploadUrl, key } = await this.s3.generatePresignedUrl(
+            `SKU-${data.name}`
+        );
 
-        return await this.prisma.product.update({
-            where: { SKU: product.SKU },
+        return this.prisma.product.create({
             data: {
-                image: fileName,
-                imageUrl: url,
+                ...data,
+                image: key,
+                imageUrl: uploadUrl,
             },
         });
     }
 
     async findOne(where: Prisma.ProductWhereUniqueInput): Promise<Product> {
-        return await this.prisma.product
+        return this.prisma.product
             .findUniqueOrThrow({
                 where,
             })
@@ -73,7 +65,7 @@ export class ProductService {
     ): Promise<Product[]> {
         const { page, limit, cursor, where, orderBy } = params;
 
-        return await this.prisma.product.findMany({
+        return this.prisma.product.findMany({
             skip: Number(page) - 1,
             take: Number(limit),
             cursor,
@@ -92,7 +84,7 @@ export class ProductService {
     ): Promise<Product[]> {
         const { page, limit, cursor, orderBy } = params;
 
-        return await this.prisma.product.findMany({
+        return this.prisma.product.findMany({
             skip: Number(page) - 1,
             take: Number(limit),
             cursor,
@@ -109,17 +101,9 @@ export class ProductService {
         image?: Express.Multer.File
     ): Promise<Product> {
         const product = await this.findOne({ SKU });
+        const imageUrl = await this.s3.generatePresignedUrl(`SKU-${SKU}-`);
 
-        if (image) {
-            const { fileName, url } = await (product.image
-                ? this.s3.replaceFile(image, product.image)
-                : this.s3.uploadFile(image));
-
-            data.image = fileName;
-            data.imageUrl = url;
-        }
-
-        return await this.prisma.product.update({
+        return this.prisma.product.update({
             data,
             where: {
                 SKU,
@@ -144,7 +128,7 @@ export class ProductService {
             });
         }
 
-        return await this.prisma.product.update({
+        return this.prisma.product.update({
             where: { SKU },
             data: {
                 available: !product.available,
@@ -193,7 +177,7 @@ export class ProductService {
         userId: number,
         SKU: number
     ): Promise<LikeOnProduct[]> {
-        return await this.prisma.likesOnProducts.findMany({
+        return this.prisma.likesOnProducts.findMany({
             where: {
                 userId,
                 productSKU: SKU,
@@ -204,7 +188,7 @@ export class ProductService {
     async delete(SKU: number): Promise<Product> {
         const _ = await this.findOne({ SKU });
 
-        return await this.prisma.product.delete({
+        return this.prisma.product.delete({
             where: {
                 SKU,
             },
