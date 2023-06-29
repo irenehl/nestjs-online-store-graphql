@@ -16,7 +16,7 @@ export class CartService {
     ) {}
 
     async findOne(userId: number): Promise<Cart> {
-        return await this.prisma.cart
+        return this.prisma.cart
             .findFirstOrThrow({
                 where: { userId },
             })
@@ -26,7 +26,7 @@ export class CartService {
     }
 
     async findProductsOnCart(cartId: number) {
-        return await this.prisma.productsOnCarts.findMany({
+        return this.prisma.productsOnCarts.findMany({
             where: { cartId },
         });
     }
@@ -54,7 +54,7 @@ export class CartService {
             },
         });
 
-        return await this.findOne(cart.userId);
+        return this.findOne(cart.userId);
     }
 
     async deleteProductOnCart(userId: number, SKU: number) {
@@ -88,6 +88,6 @@ export class CartService {
             },
         });
 
-        return await this.findOne(cart.userId);
+        return this.findOne(cart.userId);
     }
 }
