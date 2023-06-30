@@ -119,6 +119,7 @@ I made some helpful "pre-query" files to help you on testing the API (the base U
 This API is deployed in [Heroku](https://devcenter.heroku.com/)
 
 Check the deploy link [here](https://nestjs-gql-0f12fdf0da4c.herokuapp.com/)
+
 Test GraphQL [here](https://nestjs-gql-0f12fdf0da4c.herokuapp.com/graphql)
 
 Hint: Check collections in GraphQL, there are some helpful endpoints that you can try!
