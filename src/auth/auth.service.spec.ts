@@ -105,12 +105,10 @@ describe('AuthService', () => {
             });
 
             // Act
-            const result = await service.resetHandler(
-                {
-                    password: '123',
-                },
-                'token'
-            );
+            const result = await service.resetHandler({
+                password: '123',
+                token: 'token',
+            });
 
             // Assert
             expect(result).toHaveProperty('recovery');
@@ -120,10 +118,10 @@ describe('AuthService', () => {
         it('should fail when there is no token', async () => {
             // Arrange, Act & Assert
             await expect(
-                service.resetHandler(
-                    { password: '1' },
-                    null as unknown as string
-                )
+                service.resetHandler({
+                    password: '1',
+                    token: null as unknown as string,
+                })
             ).rejects.toThrow('Token is invalid');
         });
     });
