@@ -38,7 +38,7 @@ export class OrderService {
         });
     }
 
-    async placeOrder(userId: number) {
+    async placeOrder(userId: number): Promise<Order> {
         return this.prisma.$transaction(async (tx) => {
             const cart = await tx.cart
                 .findFirstOrThrow({
@@ -99,6 +99,7 @@ export class OrderService {
                         notifications.push({
                             name: product.name,
                             quantity: product.stock,
+                            img: product.imageUrl ?? '',
                             users: (
                                 await tx.user.findMany({
                                     where: {
@@ -139,7 +140,6 @@ export class OrderService {
                 })
             );
 
-            // TODO: Send img
             if (notifications && notifications.length > 0) {
                 await Promise.all(
                     notifications.map(async (notification) =>
@@ -148,7 +148,11 @@ export class OrderService {
                             subject: 'Check your cart!',
                             textReplacer: (data) =>
                                 data
-                                    .replace('{PRODUCT_NAME', notification.name)
+                                    .replace(
+                                        '{PRODUCT_NAME}',
+                                        notification.name
+                                    )
+                                    .replace('{PRODUCT_IMG}', notification.img)
                                     .replace(
                                         '{PRODUCT_STOCK}',
                                         notification.quantity.toString()

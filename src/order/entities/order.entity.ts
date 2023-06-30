@@ -1,5 +1,5 @@
-import { ProductOnCart } from '@cart/entitties/product-on-cart.entity';
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
+import { ProductOnOrderEntity } from './product-on-order.entity';
 
 @ObjectType()
 export class OrderEntity {
@@ -12,6 +12,6 @@ export class OrderEntity {
     @Field(() => Float)
     total: number;
 
-    @Field(() => [ProductOnCart])
-    items: ProductOnCart[];
+    @Field(() => [ProductOnOrderEntity])
+    items: ProductOnOrderEntity[];
 }

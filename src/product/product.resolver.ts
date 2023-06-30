@@ -69,6 +69,8 @@ export class ProductResolver {
         return this.productService.toggle(SKU);
     }
 
+    @UseGuards(RolesGuard)
+    @Role('CLIENT')
     @Mutation(() => LikeOnProduct, { name: 'likeProduct' })
     async likeProduct(
         @UserDecorator() user: User,

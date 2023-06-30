@@ -8,6 +8,7 @@ export default `
 </head>
 <body>
     <p>The product {PRODUCT_NAME} that you have added in your cart is running out! There's currently {PRODUCT_STOCK} items remaining, buy it soon!
+    <img src="{PRODUCT_IMG}" alt="{PRODUCT_NAME}" />
 </body>
 </html>
 `;

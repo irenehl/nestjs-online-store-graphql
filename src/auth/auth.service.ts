@@ -44,11 +44,11 @@ export class AuthService {
         return this.userService.findOne({ email });
     }
 
-    async resetHandler(data: ResetPasswordInput, token: string) {
+    async resetHandler({ password, token }: ResetPasswordInput): Promise<User> {
         if (!token || token.length <= 0)
             throw new BadRequestException('Token is invalid');
 
-        const user = await this.userService.resetHandler(data, token);
+        const user = await this.userService.resetHandler({ password, token });
 
         if (!user) throw new BadRequestException('Something went wrong');
 

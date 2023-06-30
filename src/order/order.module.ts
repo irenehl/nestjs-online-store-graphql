@@ -9,6 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { S3Service } from 'src/aws/s3.service';
 import { SesService } from '@aws/ses.service';
 import { OrderResolver } from './order.resolver';
+import { ProductOnOrderResolver } from './product-on-order.resolver';
 
 @Module({
     imports: [AwsModule],
@@ -22,6 +23,7 @@ import { OrderResolver } from './order.resolver';
         S3Service,
         SesService,
         OrderResolver,
+        ProductOnOrderResolver,
     ],
 })
 export class OrderModule {}

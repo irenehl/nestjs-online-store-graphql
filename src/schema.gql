@@ -50,11 +50,16 @@ type CartEntity {
   items: [ProductOnCart!]!
 }
 
+type ProductOnOrderEntity {
+  quantity: Int!
+  product: ProductEntity!
+}
+
 type OrderEntity {
   id: Int!
   userId: Int!
   total: Float!
-  items: [ProductOnCart!]!
+  items: [ProductOnOrderEntity!]!
 }
 
 type Query {
@@ -74,7 +79,7 @@ type Query {
 type Mutation {
   login(loginInput: LoginInput!): Token!
   resetPasswordRequest(requestPasswordInput: RequestPasswordInput!): UserEntity!
-  setNewPassword(resetPasswordInput: ResetPasswordInput!, token: String!): String!
+  setNewPassword(resetPasswordInput: ResetPasswordInput!): UserEntity!
   createUser(createUserInput: CreateUserInput!): UserEntity!
   updateUser(updateUserInput: UpdateUserInput!): UserEntity!
   deleteUser: UserEntity!
@@ -102,6 +107,7 @@ input RequestPasswordInput {
 
 input ResetPasswordInput {
   password: String!
+  token: String!
 }
 
 input CreateUserInput {

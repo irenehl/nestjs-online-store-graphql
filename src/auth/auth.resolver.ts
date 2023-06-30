@@ -23,11 +23,10 @@ export class AuthResolver {
         return this.authService.resetRequest(requestPasswordInput);
     }
 
-    @Mutation(() => String, { name: 'setNewPassword' })
+    @Mutation(() => UserEntity, { name: 'setNewPassword' })
     async resetHandler(
-        @Args('resetPasswordInput') resetPasswordInput: ResetPasswordInput,
-        @Args('token') token: string
+        @Args('resetPasswordInput') resetPasswordInput: ResetPasswordInput
     ) {
-        return this.authService.resetHandler(resetPasswordInput, token);
+        return this.authService.resetHandler(resetPasswordInput);
     }
 }

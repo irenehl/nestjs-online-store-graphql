@@ -10,4 +10,7 @@ export class StockNotificationEntity {
 
     @Field(() => String)
     name: string;
+
+    @Field(() => String)
+    img: string;
 }

@@ -103,7 +103,8 @@
       "!**/*.enum.(t|j)s",
       "!**/*.mock.(t|j)s",
       "!**/*main.(t|j)s",
-      "!**/config/*"
+      "!**/config/*",
+      "!**/aws/*"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",

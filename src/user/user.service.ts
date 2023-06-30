@@ -158,12 +158,12 @@ export class UserService {
         return user;
     }
 
-    async resetHandler(data: ResetPasswordInput, token: string) {
+    async resetHandler({ password, token }: ResetPasswordInput) {
         try {
             let user = await this.findOne({ recovery: token });
 
             user = await this.update(user.id, {
-                password: data.password,
+                password: password,
                 recovery: null,
             });
 
