@@ -16,7 +16,7 @@
 
 ## Description
 
-This API was created in NestJS and works like a online store, as a `Manager` you can create, update and delete products, and as a `Client` you can see all the products that are allocated in the database. There are a lot of functions that you can play with, enjoy it!
+This API was created in NestJS and works like an online store, as a `Manager` you can create, update and delete products, and as a `Client` you can see all the products that are allocated in the database. There are a lot of functions that you can play with, enjoy it!
 
 ## Installation
 
@@ -106,13 +106,22 @@ I made some helpful "pre-query" files to help you on testing the API (the base U
 * [Order Handler](http://localhost:3000/graphql?explorerURLState=N4IgJg9gxgrgtgUwHYBcQC4RxighigSwiQAIAFAG1ygQHkAnMBek4AHVJIAcqaGmW7TiRIEwHESJgBnZgElxwkigh4KEyQRQI401hskkAjjFyotATwOSu9CGBhQU%2BpYYDKAaQCq1w0lyIvpJM0lD0BFyExEEitgQ0MSTSKlAA1om4AG64BFQARhQIiQRwuADmRa6apRVe9OpVAL7WzZytrRwmzBYkFSgAghQU-Mx6QiJ9g8OMoy6GYtYy8oqGKmrWWjpjQSZmhChWVbb2js7jhpKePlUi-oE3JCFhEVFIiXEJD8nQ6Q9ZOflCsUapULtVygg6g0wa1DLCSO0OJ0YN0SABxBAoACyFhG9AAFAASPo4vEKdAkOSoACEAEo5r1MaSZgSxBTiUzcSyFPTziIFkolvQFNY1rhoZptLoGYZduYDkFjg4nDKLldEndQWDHghQuFIkQ3g8Plqwd80hlsrlcAVTRcShDgRCoUF4SJ4YijSAADQgbLhG2FaQYEDnNggElcgQijAkACMHEaPpAAAsELgBMHMOwQP0cCmIOEAF74Q3h9DhgBC6fozBICAsACkU3k0VACLQCI25F4i3I4wA5AhyaRUgBKAFYoABhOQANjkqS4AA0AGrTxsATgAdA3GxQ8gB1ABiXDys4XcDHLbgQ1bx%2BkeQAzJXCloUwAtNFxs%2BpSsWABNZcPxgAAZOAB0yOQCAAd3iJ9V2HAArCAAA9QI3Cw8gAJlQig5BQggABUvGPWgAEUvDAY8vGHUdbxTMALyxIiAIAFloAARABRIsB04qBsIHZcAAZtzHNwkOPABaTiAA5uLyONpLYsgsTk68IA8OMsQACQnbC5AAdjnIyx1Q2g2Ow0CUyQbijDktEYLIHwQCTX09ReEM3KAA)
 
 ## Extra points
-- [X] When the stock of a product reaches 3, notify the last user that liked it and not purchased the product yet with an email. Use a background job and make sure to include the product's image in the email.
+- [X] When the stock of a product reaches 3, notify the last user that liked it and has not purchased the product yet with an email. Use a background job and make sure to include the product's image in the email.
 
 - [X]  Add forgot password functionality.
 
 - [X] Send an email when the user changes the password
 
-- [ ] Deploy on Heroku
+- [X] Deploy on Heroku
+
+## Deploy
+
+This API is deployed in [Heroku](https://devcenter.heroku.com/)
+
+Check the deploy link [here](https://nestjs-gql-0f12fdf0da4c.herokuapp.com/)
+Test GraphQL [here](https://nestjs-gql-0f12fdf0da4c.herokuapp.com/graphql)
+
+Hint: Check collections in GraphQL, there are some helpful endpoints that you can try!
 
 ## Test coverage
 
