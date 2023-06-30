@@ -116,5 +116,4 @@ I made some helpful "pre-query" files to help you on testing the API (the base U
 
 ## Test coverage
 
-![image](https://github.com/irenehl/nestjs-nerdery-challenge/assets/54600515/2f43a6fb-6519-4a9d-8b69-faa59d28211f)
-
+![image](https://github.com/irenehl/graphql-challenge/assets/54600515/8eb10084-831f-437f-a46d-91463de526a4)
