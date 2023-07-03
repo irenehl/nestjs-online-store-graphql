@@ -56,7 +56,7 @@ export class CategoryService {
         where: Prisma.CategoryWhereUniqueInput,
         data: Prisma.CategoryUpdateInput
     ): Promise<Category> {
-        const _ = await this.findOne(where);
+        await this.findOne(where);
 
         return this.prisma.category.update({
             data,
@@ -65,7 +65,7 @@ export class CategoryService {
     }
 
     async delete(where: Prisma.CategoryWhereUniqueInput): Promise<Category> {
-        const _ = await this.findOne(where);
+        await this.findOne(where);
 
         return this.prisma.category.delete({ where });
     }

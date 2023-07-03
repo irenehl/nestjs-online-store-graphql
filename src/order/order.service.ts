@@ -96,10 +96,11 @@ export class OrderService {
                             },
                         });
 
+                        // TODO: Review this image
                         notifications.push({
                             name: product.name,
                             quantity: product.stock,
-                            img: product.imageUrl ?? '',
+                            img: product.image ?? '',
                             users: (
                                 await tx.user.findMany({
                                     where: {

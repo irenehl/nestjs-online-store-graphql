@@ -14,6 +14,7 @@ import { LikeOnProductModel } from './models/like-on-product.model';
 import { Product } from '@prisma/client';
 
 @Injectable()
+// TODO: Review how to send image wiht saving in the URL in all the methods that return the product is necessary
 export class ProductService {
     constructor(
         private prisma: PrismaService,
@@ -33,29 +34,39 @@ export class ProductService {
             id: data.categoryId,
         });
 
-        const { uploadUrl, key } = await this.s3.generatePresignedUrl(
-            `SKU-${data.name}`
-        );
+        const { key } = await this.s3.generatePresignedUrl(`SKU-${data.name}`);
 
         return this.prisma.product.create({
             data: {
                 ...data,
                 image: key,
-                imageUrl: uploadUrl,
             },
         });
     }
 
-    async findOne(where: Prisma.ProductWhereUniqueInput): Promise<Product> {
-        return this.prisma.product
+    // TODO: Check this promise
+    async findOne(
+        where: Prisma.ProductWhereUniqueInput
+    ): Promise<Product & { imageUrl: string }> {
+        const product = await this.prisma.product
             .findUniqueOrThrow({
                 where,
             })
             .catch(() => {
                 throw new NotFoundException(`Product ${where.SKU} not found`);
             });
+
+        const { uploadUrl } = await this.s3.generatePresignedUrl(
+            `SKU-${product.name}`
+        );
+
+        return {
+            ...product,
+            imageUrl: uploadUrl,
+        };
     }
 
+    // TODO: Return image peer product
     async findAll(
         params: PaginationArgs & {
             cursor?: Prisma.ProductWhereUniqueInput;
@@ -74,6 +85,7 @@ export class ProductService {
         });
     }
 
+    // TODO: Return image peer product
     async getProductByCategory(
         categoryId: number,
         params: PaginationArgs & {
@@ -99,17 +111,14 @@ export class ProductService {
         SKU: number,
         data: UpdateProductInput & { image?: string; imageUrl?: string }
     ): Promise<Product> {
-        const _ = await this.findOne({ SKU });
+        await this.findOne({ SKU });
 
-        const { uploadUrl, key } = await this.s3.generatePresignedUrl(
-            `SKU-${data.name}`
-        );
+        const { key } = await this.s3.generatePresignedUrl(`SKU-${data.name}`);
 
         return this.prisma.product.update({
             data: {
                 ...data,
                 image: key,
-                imageUrl: uploadUrl,
             },
             where: {
                 SKU,
@@ -142,8 +151,11 @@ export class ProductService {
         });
     }
 
-    async likeProduct(userId: number, SKU: number): Promise<LikeOnProductModel> {
-        const _ = await this.findOne({ SKU });
+    async likeProduct(
+        userId: number,
+        SKU: number
+    ): Promise<LikeOnProductModel> {
+        await this.findOne({ SKU });
 
         const isLiked = await this.prisma.likesOnProducts.findUnique({
             where: {
@@ -188,7 +200,7 @@ export class ProductService {
     }
 
     async delete(SKU: number): Promise<Product> {
-        const _ = await this.findOne({ SKU });
+        await this.findOne({ SKU });
 
         return this.prisma.product.delete({
             where: {
