@@ -11,20 +11,20 @@ import { UserEntity } from '@user/entitites/user.entity';
 export class AuthResolver {
     constructor(private readonly authService: AuthService) {}
 
-    @Mutation(() => Token)
+    @Mutation(() => Token, { name: 'login' })
     async login(@Args('loginInput') loginInput: LoginInput): Promise<Token> {
         return this.authService.login(loginInput);
     }
 
     @Mutation(() => UserEntity, { name: 'resetPasswordRequest' })
-    async resetRequest(
+    async resetPasswordRequest(
         @Args('requestPasswordInput') requestPasswordInput: RequestPasswordInput
     ): Promise<User> {
         return this.authService.resetRequest(requestPasswordInput);
     }
 
     @Mutation(() => UserEntity, { name: 'setNewPassword' })
-    async resetHandler(
+    async setNewPassword(
         @Args('resetPasswordInput') resetPasswordInput: ResetPasswordInput
     ) {
         return this.authService.resetHandler(resetPasswordInput);

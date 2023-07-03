@@ -1,4 +1,4 @@
-import { Parent, ResolveProperty, Resolver } from '@nestjs/graphql';
+import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { ProductService } from '@product/product.service';
 import { ProductEntity } from '@product/entities/product.entity';
 import { ProductsOnOrders } from '@prisma/client';
@@ -8,7 +8,7 @@ import { ProductOnOrderEntity } from './entities/product-on-order.entity';
 export class ProductOnOrderResolver {
     constructor(private readonly productService: ProductService) {}
 
-    @ResolveProperty('product', () => ProductEntity)
+    @ResolveField('product', () => ProductEntity)
     async product(@Parent() productOnCart: ProductsOnOrders) {
         const { productSKU: SKU } = productOnCart;
 

@@ -33,7 +33,7 @@ export class ProductResolver {
     @UseGuards(RolesGuard)
     @Role('MANAGER')
     @Mutation(() => ProductEntity, { name: 'createProduct' })
-    async create(
+    async createProduct(
         @Args('createProductInput') createProductInput: CreateProductInput
     ) {
         return this.productService.create(createProductInput);
@@ -42,7 +42,7 @@ export class ProductResolver {
     @UseGuards(RolesGuard)
     @Role('MANAGER')
     @Mutation(() => ProductEntity, { name: 'updateProduct' })
-    async update(
+    async updateProduct(
         @Args('updateProductInput') updateProductInput: UpdateProductInput
     ): Promise<Product> {
         return this.productService.update(
@@ -54,7 +54,7 @@ export class ProductResolver {
     @UseGuards(RolesGuard)
     @Role('MANAGER')
     @Mutation(() => ProductEntity, { name: 'deleteProduct' })
-    async delete(
+    async deleteProduct(
         @Args('SKU', { type: () => Int }) SKU: number
     ): Promise<Product> {
         return this.productService.delete(SKU);
@@ -63,7 +63,7 @@ export class ProductResolver {
     @UseGuards(RolesGuard)
     @Role('MANAGER')
     @Mutation(() => ProductEntity, { name: 'toggleProduct' })
-    async toggle(
+    async toggleProduct(
         @Args('SKU', { type: () => Int }) SKU: number
     ): Promise<Product> {
         return this.productService.toggle(SKU);
@@ -80,7 +80,9 @@ export class ProductResolver {
     }
 
     @Query(() => [LikeOnProduct], { name: 'getMyFavoriteList' })
-    async getFavorites(@UserDecorator() user: User): Promise<LikeOnProduct[]> {
+    async getMyFavoriteList(
+        @UserDecorator() user: User
+    ): Promise<LikeOnProduct[]> {
         return this.productService.getFavoriteList(user.id);
     }
 
@@ -95,7 +97,7 @@ export class ProductResolver {
 
     @Public()
     @Query(() => ProductEntity, { name: 'findOneProduct' })
-    async findOne(
+    async findOneProduct(
         @Args('SKU', { type: () => Int }) SKU: number
     ): Promise<Product> {
         return this.productService.findOne({ SKU });
@@ -103,7 +105,9 @@ export class ProductResolver {
 
     @Public()
     @Query(() => [ProductEntity], { name: 'findAllProducts' })
-    async findAll(@Args() paginationArgs: PaginationArgs): Promise<Product[]> {
+    async findAllProducts(
+        @Args() paginationArgs: PaginationArgs
+    ): Promise<Product[]> {
         return this.productService.findAll(paginationArgs);
     }
 

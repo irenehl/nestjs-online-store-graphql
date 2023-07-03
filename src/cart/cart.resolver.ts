@@ -23,7 +23,7 @@ export class CartResolver {
     constructor(private readonly cartService: CartService) {}
 
     @Query(() => CartEntity, { name: 'findMyCart' })
-    async findOne(@UserDecorator() user: User): Promise<Cart> {
+    async findMyCart(@UserDecorator() user: User): Promise<Cart> {
         return this.cartService.findOne(Number(user.id));
     }
 
@@ -37,7 +37,7 @@ export class CartResolver {
     }
 
     @Mutation(() => CartEntity, { name: 'deleteProductOnCart' })
-    async deleteProductToCart(
+    async deleteProductOnCart(
         @UserDecorator() user: User,
         @Args('SKU', { type: () => Int }) SKU: number
     ): Promise<Cart> {

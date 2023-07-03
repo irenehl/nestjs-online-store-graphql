@@ -23,14 +23,18 @@ export class OrderResolver {
     constructor(private readonly orderService: OrderService) {}
 
     @Query(() => OrderEntity, { name: 'getMyOrder' })
-    async findOne(@Args('id', { type: () => Int }) id: number): Promise<Order> {
+    async getMyOrder(
+        @Args('id', { type: () => Int }) id: number
+    ): Promise<Order> {
         return this.orderService.findOne({ id });
     }
 
     @UseGuards(RolesGuard)
     @Role('MANAGER')
     @Query(() => [OrderEntity], { name: 'getAllOrders' })
-    async findAll(@Args() paginationArgs: PaginationArgs): Promise<Order[]> {
+    async getAllOrders(
+        @Args() paginationArgs: PaginationArgs
+    ): Promise<Order[]> {
         return this.orderService.findAll(paginationArgs);
     }
 

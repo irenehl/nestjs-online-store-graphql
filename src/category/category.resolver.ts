@@ -19,7 +19,7 @@ export class CategoryResolver {
     @UseGuards(RolesGuard)
     @Role('MANAGER')
     @Mutation(() => CategoryEntity, { name: 'createCategory' })
-    async create(
+    async createCategory(
         @Args('createCategoryInput') createCategoryInput: CreateCategoryInput
     ): Promise<Category> {
         return this.categoryService.create(createCategoryInput);
@@ -28,7 +28,7 @@ export class CategoryResolver {
     @UseGuards(RolesGuard)
     @Role('MANAGER')
     @Mutation(() => CategoryEntity, { name: 'updateCategory' })
-    async update(
+    async updateCategory(
         @Args('updateCategoryInput') updateCategoryInput: UpdateCategoryInput
     ): Promise<Category> {
         return this.categoryService.update(
@@ -40,7 +40,7 @@ export class CategoryResolver {
     @UseGuards(RolesGuard)
     @Role('MANAGER')
     @Mutation(() => CategoryEntity, { name: 'deleteCategory' })
-    async delete(
+    async deleteCategory(
         @Args('id', { type: () => Int }) id: number
     ): Promise<Category> {
         return this.categoryService.delete({ id });
@@ -48,7 +48,7 @@ export class CategoryResolver {
 
     @Public()
     @Query(() => CategoryEntity, { name: 'findOneCategory' })
-    async findOne(
+    async findOneCategory(
         @Args('id', { type: () => Int }) id: number
     ): Promise<Category> {
         return this.categoryService.findOne({ id });
@@ -56,7 +56,9 @@ export class CategoryResolver {
 
     @Public()
     @Query(() => [CategoryEntity], { name: 'findAllCategories' })
-    async findAll(@Args() paginationArgs: PaginationArgs): Promise<Category[]> {
+    async findAllCategories(
+        @Args() paginationArgs: PaginationArgs
+    ): Promise<Category[]> {
         return this.categoryService.findAll(paginationArgs);
     }
 }

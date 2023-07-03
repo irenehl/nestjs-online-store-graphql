@@ -19,7 +19,7 @@ export class UserResolver {
 
     @Public()
     @Mutation(() => UserEntity, { name: 'createUser' })
-    async create(
+    async createUser(
         @Args('createUserInput') createUserInput: CreateUserInput
     ): Promise<User> {
         return this.userService.create(createUserInput);
@@ -35,19 +35,23 @@ export class UserResolver {
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => UserEntity, { name: 'deleteUser' })
-    async delete(@UserDecorator() user: User): Promise<User> {
+    async deleteUser(@UserDecorator() user: User): Promise<User> {
         return this.userService.delete(user.id);
     }
 
     @Query(() => UserEntity, { name: 'findOneUser' })
-    async getOne(@Args('id', { type: () => Int }) id: number): Promise<User> {
+    async findOneUser(
+        @Args('id', { type: () => Int }) id: number
+    ): Promise<User> {
         return this.userService.findOne({ id });
     }
 
     @Role('MANAGER')
     @UseGuards(RolesGuard)
     @Query(() => [UserEntity], { name: 'findAllUsers' })
-    async getAll(@Args() paginationArgs: PaginationArgs): Promise<User[]> {
+    async findAllUsers(
+        @Args() paginationArgs: PaginationArgs
+    ): Promise<User[]> {
         return this.userService.findAll(paginationArgs);
     }
 }
