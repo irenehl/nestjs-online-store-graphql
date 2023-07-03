@@ -1,12 +1,9 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class ProductOnCart {
+export class LikeOnProductModel {
     @Field(() => Int)
-    quantity: number;
-
-    @Field(() => Int)
-    cartId: number;
+    userId: number;
 
     @Field(() => Int)
     productSKU: number;

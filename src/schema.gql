@@ -2,7 +2,7 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type UserEntity {
+type UserModel {
   id: ID!
   name: String!
   lastname: String!
@@ -16,84 +16,84 @@ type Token {
   access_token: String!
 }
 
-type LikeOnProduct {
+type LikeOnProductModel {
   userId: Int!
   productSKU: Int!
 }
 
-type CategoryEntity {
+type CategoryModel {
   id: ID!
   name: String!
 }
 
-type ProductEntity {
+type ProductModel {
   SKU: Int!
   name: String!
   description: String!
   price: Float!
   stock: Int!
   available: Boolean!
-  category: CategoryEntity!
+  category: CategoryModel!
   image: String
   imageUrl: String
 }
 
-type ProductOnCart {
+type ProductOnCartModel {
   quantity: Int!
   cartId: Int!
   productSKU: Int!
 }
 
-type CartEntity {
+type CartModel {
   id: Int!
   userId: Int!
-  items: [ProductOnCart!]!
+  items: [ProductOnCartModel!]!
 }
 
-type ProductOnOrderEntity {
+type ProductOnOrderModel {
   quantity: Int!
-  product: ProductEntity!
+  product: ProductModel!
 }
 
-type OrderEntity {
+type OrderModel {
   id: Int!
   userId: Int!
   total: Float!
-  items: [ProductOnOrderEntity!]!
+  items: [ProductOnOrderModel!]!
 }
 
 type Query {
-  findOneUser(id: Int!): UserEntity!
-  findAllUsers(page: Int! = 1, limit: Int! = 15): [UserEntity!]!
-  getMyFavoriteList: [LikeOnProduct!]!
-  getProductsByCategory(categoryId: Int!, page: Int! = 1, limit: Int! = 15): [ProductEntity!]!
-  findOneProduct(SKU: Int!): ProductEntity!
-  findAllProducts(page: Int! = 1, limit: Int! = 15): [ProductEntity!]!
-  findMyCart: CartEntity!
-  getMyOrder(id: Int!): OrderEntity!
-  getAllOrders(page: Int! = 1, limit: Int! = 15): [OrderEntity!]!
-  findOneCategory(id: Int!): CategoryEntity!
-  findAllCategories(page: Int! = 1, limit: Int! = 15): [CategoryEntity!]!
+  findOneUser(id: Int!): UserModel!
+  findAllUsers(page: Int! = 1, limit: Int! = 15): [UserModel!]!
+  getMyFavoriteList: [LikeOnProductModel!]!
+  getProductsByCategory(categoryId: Int!, page: Int! = 1, limit: Int! = 15): [ProductModel!]!
+  findOneProduct(SKU: Int!): ProductModel!
+  findAllProducts(page: Int! = 1, limit: Int! = 15): [ProductModel!]!
+  findMyCart: CartModel!
+  getMyOrder(id: Int!): OrderModel!
+  getAllOrders(page: Int! = 1, limit: Int! = 15): [OrderModel!]!
+  findOneCategory(id: Int!): CategoryModel!
+  findAllCategories(page: Int! = 1, limit: Int! = 15): [CategoryModel!]!
 }
 
 type Mutation {
   login(loginInput: LoginInput!): Token!
-  resetPasswordRequest(requestPasswordInput: RequestPasswordInput!): UserEntity!
-  setNewPassword(resetPasswordInput: ResetPasswordInput!): UserEntity!
-  createUser(createUserInput: CreateUserInput!): UserEntity!
-  updateUser(updateUserInput: UpdateUserInput!): UserEntity!
-  deleteUser: UserEntity!
-  createProduct(createProductInput: CreateProductInput!): ProductEntity!
-  updateProduct(updateProductInput: UpdateProductInput!): ProductEntity!
-  deleteProduct(SKU: Int!): ProductEntity!
-  toggleProduct(SKU: Int!): ProductEntity!
-  likeProduct(SKU: Int!): LikeOnProduct!
-  addProductToCart(addProductsToCartInput: AddProductToCartInput!): CartEntity!
-  deleteProductOnCart(SKU: Int!): CartEntity!
-  placeOrder: OrderEntity!
-  createCategory(createCategoryInput: CreateCategoryInput!): CategoryEntity!
-  updateCategory(updateCategoryInput: UpdateCategoryInput!): CategoryEntity!
-  deleteCategory(id: Int!): CategoryEntity!
+  resetPasswordRequest(requestPasswordInput: RequestPasswordInput!): UserModel!
+  setNewPassword(resetPasswordInput: ResetPasswordInput!): UserModel!
+  createUser(createUserInput: CreateUserInput!): UserModel!
+  updateUser(updateUserInput: UpdateUserInput!): UserModel!
+  deleteUser: UserModel!
+  createProduct(createProductInput: CreateProductInput!): ProductModel!
+  updateProduct(updateProductInput: UpdateProductInput!): ProductModel!
+  deleteProduct(SKU: Int!): ProductModel!
+  toggleProduct(SKU: Int!): ProductModel!
+  likeProduct(SKU: Int!): LikeOnProductModel!
+  addProductToCart(addProductsToCartInput: AddProductToCartInput!): CartModel!
+  deleteProductOnCart(SKU: Int!): CartModel!
+  placeOrder: OrderModel!
+  createCategory(createCategoryInput: CreateCategoryInput!): CategoryModel!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): CategoryModel!
+  deleteCategory(id: Int!): CategoryModel!
 }
 
 input LoginInput {

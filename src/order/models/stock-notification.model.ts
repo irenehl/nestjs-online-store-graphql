@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class StockNotificationEntity {
+export class StockNotificationModel {
     @Field(() => [String])
     users: string[];
 

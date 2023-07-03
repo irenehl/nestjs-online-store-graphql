@@ -1,7 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class CategoryEntity {
+export class CategoryModel {
     @Field(() => ID)
     id: number;
 

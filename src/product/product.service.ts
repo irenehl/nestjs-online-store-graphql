@@ -10,7 +10,7 @@ import { CategoryService } from '@category/category.service';
 import { CreateProductInput } from './dtos/input/create-product.input';
 import { UpdateProductInput } from './dtos/input/update-product.input';
 import { PaginationArgs } from '@common/dto/args/pagination.arg';
-import { LikeOnProduct } from './entities/like-on-product.entity';
+import { LikeOnProductModel } from './models/like-on-product.model';
 import { Product } from '@prisma/client';
 
 @Injectable()
@@ -142,7 +142,7 @@ export class ProductService {
         });
     }
 
-    async likeProduct(userId: number, SKU: number): Promise<LikeOnProduct> {
+    async likeProduct(userId: number, SKU: number): Promise<LikeOnProductModel> {
         const _ = await this.findOne({ SKU });
 
         const isLiked = await this.prisma.likesOnProducts.findUnique({
@@ -179,7 +179,7 @@ export class ProductService {
               });
     }
 
-    async getFavoriteList(userId: number): Promise<LikeOnProduct[]> {
+    async getFavoriteList(userId: number): Promise<LikeOnProductModel[]> {
         return this.prisma.likesOnProducts.findMany({
             where: {
                 userId,

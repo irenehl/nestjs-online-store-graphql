@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from '@user/user.service';
-import { Payload } from '@auth/entities/payload.entity';
+import { PayloadModel } from '@auth/entities/payload.entity';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -17,7 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         });
     }
 
-    async validate(payload: Payload) {
+    async validate(payload: PayloadModel) {
         const { sub } = payload;
 
         const user = await this.userService.findOne({ id: Number(sub) });

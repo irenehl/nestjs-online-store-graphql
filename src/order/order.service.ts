@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Order, Prisma } from '@prisma/client';
 import { SesService } from '@aws/ses.service';
-import { StockNotificationEntity } from './entities/stock-notification.entity';
+import { StockNotificationModel } from './models/stock-notification.model';
 import cartAlertHtml from '../mail/cart-alert.html';
 import { PaginationArgs } from '@common/dto/args/pagination.arg';
 
@@ -68,7 +68,7 @@ export class OrderService {
             });
 
             let totalAmount = 0;
-            const notifications: StockNotificationEntity[] = [];
+            const notifications: StockNotificationModel[] = [];
 
             await Promise.all(
                 cart.products.map(async ({ product, quantity }) => {
