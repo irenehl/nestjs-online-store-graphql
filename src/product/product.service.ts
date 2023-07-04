@@ -12,6 +12,7 @@ import { UpdateProductInput } from './dtos/input/update-product.input';
 import { PaginationArgs } from '@common/dto/args/pagination.arg';
 import { LikeOnProductModel } from './models/like-on-product.model';
 import { Product } from '@prisma/client';
+import { ProductWithImage } from './models/product-with-image';
 
 @Injectable()
 // TODO: Review how to send image wiht saving in the URL in all the methods that return the product is necessary
@@ -22,7 +23,7 @@ export class ProductService {
         private categoryService: CategoryService
     ) {}
 
-    async create(data: CreateProductInput) {
+    async create(data: CreateProductInput): Promise<ProductWithImage> {
         if (
             await this.prisma.product.findUnique({
                 where: { name: data.name },
@@ -34,36 +35,30 @@ export class ProductService {
             id: data.categoryId,
         });
 
-        const { key } = await this.s3.generatePresignedUrl(`SKU-${data.name}`);
+        const { key, uploadUrl } = await this.s3.generatePresignedUrl(
+            `SKU-${data.name}`
+        );
 
-        return this.prisma.product.create({
-            data: {
-                ...data,
-                image: key,
-            },
-        });
+        return {
+            ...(await this.prisma.product.create({
+                data: {
+                    ...data,
+                    image: key,
+                },
+            })),
+            uploadUrl,
+        };
     }
 
     // TODO: Check this promise
-    async findOne(
-        where: Prisma.ProductWhereUniqueInput
-    ): Promise<Product & { imageUrl: string }> {
-        const product = await this.prisma.product
+    async findOne(where: Prisma.ProductWhereUniqueInput): Promise<Product> {
+        return this.prisma.product
             .findUniqueOrThrow({
                 where,
             })
             .catch(() => {
                 throw new NotFoundException(`Product ${where.SKU} not found`);
             });
-
-        const { uploadUrl } = await this.s3.generatePresignedUrl(
-            `SKU-${product.name}`
-        );
-
-        return {
-            ...product,
-            imageUrl: uploadUrl,
-        };
     }
 
     // TODO: Return image peer product
@@ -110,20 +105,25 @@ export class ProductService {
     async update(
         SKU: number,
         data: UpdateProductInput & { image?: string; imageUrl?: string }
-    ): Promise<Product> {
+    ): Promise<ProductWithImage> {
         await this.findOne({ SKU });
 
-        const { key } = await this.s3.generatePresignedUrl(`SKU-${data.name}`);
+        const { key, uploadUrl } = await this.s3.generatePresignedUrl(
+            `SKU-${data.name}`
+        );
 
-        return this.prisma.product.update({
-            data: {
-                ...data,
-                image: key,
-            },
-            where: {
-                SKU,
-            },
-        });
+        return {
+            ...(await this.prisma.product.update({
+                data: {
+                    ...data,
+                    image: key,
+                },
+                where: {
+                    SKU,
+                },
+            })),
+            uploadUrl,
+        };
     }
 
     async isAvailable(SKU: number, amount: number): Promise<boolean> {

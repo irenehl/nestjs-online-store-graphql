@@ -11,6 +11,7 @@ import { UserModel } from '@user/models/user.model';
 export class AuthResolver {
     constructor(private readonly authService: AuthService) {}
 
+    // TODO: TokenModel
     @Mutation(() => Token, { name: 'login' })
     async login(@Args('loginInput') loginInput: LoginInput): Promise<Token> {
         return this.authService.login(loginInput);

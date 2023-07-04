@@ -35,7 +35,7 @@ type ProductModel {
   available: Boolean!
   category: CategoryModel!
   image: String
-  imageUrl: String
+  uploadUrl: String!
 }
 
 type ProductOnCartModel {

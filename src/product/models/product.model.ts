@@ -29,6 +29,6 @@ export class ProductModel {
     @Field(() => String, { nullable: true })
     image?: string | null;
 
-    @Field(() => String, { nullable: true })
-    imageUrl?: string | null;
+    @Field(() => String)
+    uploadUrl: string;
 }
