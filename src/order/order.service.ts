@@ -96,7 +96,6 @@ export class OrderService {
                             },
                         });
 
-                        // TODO: Review this image
                         notifications.push({
                             name: product.name,
                             quantity: product.stock,

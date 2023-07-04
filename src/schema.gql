@@ -12,7 +12,7 @@ type UserModel {
   role: String!
 }
 
-type Token {
+type TokenModel {
   access_token: String!
 }
 
@@ -77,7 +77,7 @@ type Query {
 }
 
 type Mutation {
-  login(loginInput: LoginInput!): Token!
+  login(loginInput: LoginInput!): TokenModel!
   resetPasswordRequest(requestPasswordInput: RequestPasswordInput!): UserModel!
   setNewPassword(resetPasswordInput: ResetPasswordInput!): UserModel!
   createUser(createUserInput: CreateUserInput!): UserModel!

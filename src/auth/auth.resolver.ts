@@ -1,6 +1,6 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
-import { Token } from './types/token.type';
+import { TokenModel } from './types/token.type';
 import { LoginInput } from './dtos/inputs/login.input';
 import { RequestPasswordInput } from '@user/dtos/inputs/request-password.input';
 import { ResetPasswordInput } from '@user/dtos/inputs/reset-password.input';
@@ -11,9 +11,10 @@ import { UserModel } from '@user/models/user.model';
 export class AuthResolver {
     constructor(private readonly authService: AuthService) {}
 
-    // TODO: TokenModel
-    @Mutation(() => Token, { name: 'login' })
-    async login(@Args('loginInput') loginInput: LoginInput): Promise<Token> {
+    @Mutation(() => TokenModel, { name: 'login' })
+    async login(
+        @Args('loginInput') loginInput: LoginInput
+    ): Promise<TokenModel> {
         return this.authService.login(loginInput);
     }
 

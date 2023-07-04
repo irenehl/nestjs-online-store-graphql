@@ -15,7 +15,6 @@ import { Product } from '@prisma/client';
 import { ProductWithImage } from './models/product-with-image';
 
 @Injectable()
-// TODO: Review how to send image wiht saving in the URL in all the methods that return the product is necessary
 export class ProductService {
     constructor(
         private prisma: PrismaService,
@@ -50,7 +49,6 @@ export class ProductService {
         };
     }
 
-    // TODO: Check this promise
     async findOne(where: Prisma.ProductWhereUniqueInput): Promise<Product> {
         return this.prisma.product
             .findUniqueOrThrow({
@@ -61,7 +59,6 @@ export class ProductService {
             });
     }
 
-    // TODO: Return image peer product
     async findAll(
         params: PaginationArgs & {
             cursor?: Prisma.ProductWhereUniqueInput;
@@ -80,7 +77,6 @@ export class ProductService {
         });
     }
 
-    // TODO: Return image peer product
     async getProductByCategory(
         categoryId: number,
         params: PaginationArgs & {

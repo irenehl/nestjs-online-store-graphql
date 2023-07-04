@@ -10,7 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { ResetPasswordInput } from '@user/dtos/inputs/reset-password.input';
 import { RequestPasswordInput } from '@user/dtos/inputs/request-password.input';
 import { LoginInput } from './dtos/inputs/login.input';
-import { Token } from './types/token.type';
+import { TokenModel } from './types/token.type';
 import { User } from '@prisma/client';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class AuthService {
         private configService: ConfigService
     ) {}
 
-    async login({ email, password }: LoginInput): Promise<Token> {
+    async login({ email, password }: LoginInput): Promise<TokenModel> {
         const user = await this.userService.findOne({ email });
 
         if (!(await bcrypt.compare(password, user.password)))
